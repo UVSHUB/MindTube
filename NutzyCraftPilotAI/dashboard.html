@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Console - Nutzy Craft PilotAI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* Specific Dashboard Layout */
+        .console-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            /* Match navbar max-width */
+            margin: 2rem auto;
+            padding: 0;
+            align-items: start;
+        }
+
+        .sidebar {
+            /* Cleaner look, no border, just spacing/typography */
+            position: sticky;
+            top: 8rem;
+            /* Adjusted for taller navbar */
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            color: var(--labs-grey);
+            border-radius: var(--radius-pill);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-link.active,
+        .sidebar-link:hover {
+            background: var(--labs-white);
+            color: var(--labs-black);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            /* Subtle lift */
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #9aa0a6;
+            margin: 1.5rem 1.25rem 0.5rem;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 0.5rem;
+            background: #fff;
+            padding: 0.5rem;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--labs-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: #bdc1c6;
+        }
+
+        .url-input {
+            flex: 1;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: var(--radius-pill);
+        }
+
+        .analyzing-state {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Result Cards */
+        .stat-card {
+            background: var(--labs-off-white);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #f1f3f4;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--labs-black), #5f6368);
+            width: 0%;
+            transition: width 0.3s ease-out;
+            border-radius: 99px;
+        }
+
+        @media(max-width: 900px) {
+            .console-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+                position: static;
+            }
+
+            .sidebar-link {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color: #f8f9fa;">
+
+    <!-- Navbar: Matching Public Site Style but with Context -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="images/logo.jpg" alt="Antigravity Acorn" style="height: 32px; border-radius: 50%;">
+            Nutzy Craft <span>PilotAI</span>
+        </a>
+
+        <!-- Center Links -->
+        <div class="nav-links" style="position: absolute; left: 50%; transform: translateX(-50%); gap: 3rem;">
+            <a href="features.html">Features</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="about.html">About</a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
+            <!-- Profile -->
+            <div
+                style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill);">
+                <span style="font-size: 0.9rem; font-weight: 500;">Sayura Thejan</span>
+                <div
+                    style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="console-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section-title">Workspace</div>
+            <a href="#" class="sidebar-link active">Analysis Console</a>
+            <a href="#" class="sidebar-link">Saved Reports</a>
+            <a href="#" class="sidebar-link">Trends</a>
+
+            <div class="sidebar-section-title">Account</div>
+            <a href="#" class="sidebar-link">Settings</a>
+
+            <a href="index.html" class="sidebar-link" style="color: #d93025; margin-top: 1rem;">Sign Out</a>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+
+            <!-- Input Card -->
+            <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 3rem;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">New Analysis</h2>
+                    <p>Paste a YouTube URL to generate semantic insights and retention predictions.</p>
+                </div>
+
+                <div class="input-wrapper">
+                    <input type="text" id="videoUrlInput" class="url-input"
+                        placeholder="https://youtube.com/watch?v=...">
+                    <button id="analyzeBtn" class="btn btn-primary" style="padding: 0.75rem 2rem;">Analyze</button>
+                </div>
+
+                <div id="progressSection"
+                    style="display: none; margin-top: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.5rem;">
+                        <span>Processing video content...</span>
+                        <span id="percentText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progressBar" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="grid grid-2">
+                    <!-- Score Card -->
+                    <div class="card" style="background: #fff; border: 1px solid var(--labs-border);">
+                        <h4
+                            style="color: var(--labs-grey); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                            Craft Score</h4>
+                        <div style="display: flex; align-items: baseline; gap: 1rem; margin-top: 1rem;">
+                            <span
+                                style="font-size: 4rem; font-family: var(--font-head); font-weight: 700; line-height: 1;">94</span>
+                            <span
+                                style="color: #137333; font-weight: 500; background: #e6f4ea; padding: 4px 8px; border-radius: 6px;">+12%
+                                vs avg</span>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 1.1rem;">Excellent retention velocity. Your hook is
+                            performing in the top 5% of your niche.</p>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-2" style="gap: 1rem;">
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; font-weight: 700;">High</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Pacing Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; font-weight: 700;">8.5</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Clarity</div>
+                        </div>
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; font-weight: 700;">+40s</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Est. Retention</div>
+                        </div>
+                        <div class="stat-card">
+                            <div style="font-size: 2rem; font-weight: 700;">A+</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Tone Match</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const btn = document.getElementById('analyzeBtn');
+        const input = document.getElementById('videoUrlInput');
+        const progressSection = document.getElementById('progressSection');
+        const progressBar = document.getElementById('progressBar');
+        const percentText = document.getElementById('percentText');
+        const resultsSection = document.getElementById('resultsSection');
+
+        btn.addEventListener('click', () => {
+            if (!input.value) {
+                // Shake effect or simple alert
+                input.focus();
+                return;
+            }
+
+            // UI State Change
+            btn.disabled = true;
+            btn.innerText = 'Analyzing...';
+            btn.classList.add('analyzing-state');
+            progressSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+
+            let width = 0;
+            const duration = 2000; // 2 seconds fake load
+            const intervalTime = 20;
+            const steps = duration / intervalTime;
+            const increment = 100 / steps;
+
+            const interval = setInterval(() => {
+                width += increment;
+                if (width > 100) width = 100;
+
+                progressBar.style.width = width + '%';
+                percentText.innerText = Math.round(width) + '%';
+
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        btn.disabled = false;
+                        btn.innerText = 'Analyze';
+                        btn.classList.remove('analyzing-state');
+                    }, 500);
+                }
+            }, intervalTime);
+        });
+    </script>
+</body>
+
+</html>

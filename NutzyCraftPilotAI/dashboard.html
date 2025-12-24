@@ -10,127 +10,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
-    <style>
-        /* Specific Dashboard Layout */
-        .console-layout {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 2rem;
-            max-width: 1200px;
-            /* Match navbar max-width */
-            margin: 2rem auto;
-            padding: 0;
-            align-items: start;
-        }
-
-        .sidebar {
-            /* Cleaner look, no border, just spacing/typography */
-            position: sticky;
-            top: 8rem;
-            /* Adjusted for taller navbar */
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.25rem;
-            color: var(--labs-grey);
-            border-radius: var(--radius-pill);
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .sidebar-link.active,
-        .sidebar-link:hover {
-            background: var(--labs-white);
-            color: var(--labs-black);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            /* Subtle lift */
-        }
-
-        .sidebar-section-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #9aa0a6;
-            margin: 1.5rem 1.25rem 0.5rem;
-            font-weight: 600;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            gap: 0.5rem;
-            background: #fff;
-            padding: 0.5rem;
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--labs-border);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            transition: box-shadow 0.2s;
-        }
-
-        .input-wrapper:focus-within {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: #bdc1c6;
-        }
-
-        .url-input {
-            flex: 1;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            outline: none;
-            font-family: inherit;
-            font-size: 1rem;
-            border-radius: var(--radius-pill);
-        }
-
-        .analyzing-state {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        /* Result Cards */
-        .stat-card {
-            background: var(--labs-off-white);
-            padding: 1.5rem;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: #f1f3f4;
-            border-radius: 99px;
-            overflow: hidden;
-            margin-top: 1rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--labs-black), #5f6368);
-            width: 0%;
-            transition: width 0.3s ease-out;
-            border-radius: 99px;
-        }
-
-        @media(max-width: 900px) {
-            .console-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                display: flex;
-                overflow-x: auto;
-                padding-bottom: 1rem;
-                position: static;
-            }
-
-            .sidebar-link {
-                white-space: nowrap;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body style="background-color: #f8f9fa;">
@@ -142,22 +22,17 @@
             Nutzy Craft <span>PilotAI</span>
         </a>
 
-        <!-- Center Links -->
-        <div class="nav-links" style="position: absolute; left: 50%; transform: translateX(-50%); gap: 3rem;">
-            <a href="features.html">Features</a>
-            <a href="pricing.html">Pricing</a>
-            <a href="about.html">About</a>
-        </div>
+
 
         <div style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
             <!-- Profile -->
-            <div
-                style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill);">
+            <a href="settings.html"
+                style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill); text-decoration: none; color: inherit; transition: box-shadow 0.2s;">
                 <span style="font-size: 0.9rem; font-weight: 500;">Sayura Thejan</span>
                 <div
                     style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
                 </div>
-            </div>
+            </a>
         </div>
     </nav>
 
@@ -165,14 +40,14 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-section-title">Workspace</div>
-            <a href="#" class="sidebar-link active">Analysis Console</a>
-            <a href="#" class="sidebar-link">Saved Reports</a>
-            <a href="#" class="sidebar-link">Trends</a>
+            <a href="dashboard.html" class="sidebar-link active">Analysis Console</a>
+            <a href="saved-reports.html" class="sidebar-link">Saved Reports</a>
+            <a href="trends.html" class="sidebar-link">Trends</a>
 
             <div class="sidebar-section-title">Account</div>
-            <a href="#" class="sidebar-link">Settings</a>
+            <a href="settings.html" class="sidebar-link">Settings</a>
 
-            <a href="index.html" class="sidebar-link" style="color: #d93025; margin-top: 1rem;">Sign Out</a>
+            <a href="signout.html" class="sidebar-link" style="color: #d93025; margin-top: 1rem;">Sign Out</a>
         </aside>
 
         <!-- Main Content -->
@@ -185,11 +60,17 @@
                     <p>Paste a YouTube URL to generate semantic insights and retention predictions.</p>
                 </div>
 
-                <div class="input-wrapper">
+                <div class="input-wrapper" style="padding-left: 0.75rem;">
+                    <button id="attachBtn" class="btn"
+                        style="width: 40px; height: 40px; border-radius: 50%; padding: 0; background: #f1f3f4; color: var(--labs-black); display: flex; align-items: center; justify-content: center; border: none; font-size: 1.5rem; flex-shrink: 0; transition: background 0.2s;">+</button>
                     <input type="text" id="videoUrlInput" class="url-input"
                         placeholder="https://youtube.com/watch?v=...">
                     <button id="analyzeBtn" class="btn btn-primary" style="padding: 0.75rem 2rem;">Analyze</button>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+                        style="display: none;">
                 </div>
+
+                <div id="fileList" style="margin-top: 1rem; display: none; text-align: left; padding: 0 1rem;"></div>
 
                 <div id="progressSection"
                     style="display: none; margin-top: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
@@ -206,6 +87,34 @@
 
             <!-- Results Section -->
             <div id="resultsSection" style="display: none;">
+                <!-- Summary Card -->
+                <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <div style="display: flex; gap: 1.5rem; align-items: start;">
+                        <!-- Thumbnail Placeholder -->
+                        <div
+                            style="width: 160px; height: 90px; background: #f1f3f4; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 2rem;">▶️</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <h3 id="videoTitleElement"
+                                style="font-size: 1.25rem; margin-bottom: 0.5rem; line-height: 1.3;">
+                                Analyzing Video...</h3>
+                            <div
+                                style="display: flex; gap: 1rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--labs-grey);">
+                                <span id="channelNameElement">Channel Name</span>
+                                <span>•</span>
+                                <span>1.2M Views</span>
+                                <span>•</span>
+                                <span>2 days ago</span>
+                            </div>
+                            <p id="videoSummaryElement"
+                                style="font-size: 0.95rem; margin-bottom: 0; color: var(--labs-black);">
+                                Summary will appear here after analysis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-2">
                     <!-- Score Card -->
                     <div class="card" style="background: #fff; border: 1px solid var(--labs-border);">
@@ -250,15 +159,73 @@
 
     <script>
         const btn = document.getElementById('analyzeBtn');
+        const attachBtn = document.getElementById('attachBtn');
         const input = document.getElementById('videoUrlInput');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
         const progressSection = document.getElementById('progressSection');
         const progressBar = document.getElementById('progressBar');
         const percentText = document.getElementById('percentText');
         const resultsSection = document.getElementById('resultsSection');
 
-        btn.addEventListener('click', () => {
-            if (!input.value) {
-                // Shake effect or simple alert
+        let selectedFiles = [];
+
+        attachBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        attachBtn.addEventListener('mouseover', () => {
+            attachBtn.style.background = '#e8eaed';
+        });
+
+        attachBtn.addEventListener('mouseout', () => {
+            attachBtn.style.background = '#f1f3f4';
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                handleFiles(fileInput.files);
+            }
+        });
+
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            renderFileList();
+        }
+
+        function renderFileList() {
+            if (selectedFiles.length === 0) {
+                fileList.style.display = 'none';
+                return;
+            }
+            fileList.style.display = 'flex';
+            fileList.style.flexWrap = 'wrap';
+            fileList.style.gap = '0.5rem';
+
+            fileList.innerHTML = selectedFiles.map(file => `
+                <div style="background: #fff; border: 1px solid var(--labs-border); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📄</span>
+                    <span style="font-weight: 500;">${file.name}</span>
+                    <span style="color: #d93025; cursor: pointer; font-weight: bold; margin-left: 0.25rem;" onclick="removeFile('${file.name}')">×</span>
+                </div>
+            `).join('');
+        }
+
+        // Remove file helper
+        window.removeFile = function (fileName) {
+            selectedFiles = selectedFiles.filter(f => f.name !== fileName);
+            renderFileList();
+            // Reset file input so same file can be selected again if needed
+            fileInput.value = '';
+        }
+
+        // Main Analyze Function
+        function startAnalysis() {
+            const hasUrl = input.value.trim().length > 0;
+            const hasFiles = selectedFiles.length > 0;
+
+            if (!hasUrl && !hasFiles) {
                 input.focus();
                 return;
             }
@@ -267,11 +234,14 @@
             btn.disabled = true;
             btn.innerText = 'Analyzing...';
             btn.classList.add('analyzing-state');
+
             progressSection.style.display = 'block';
             resultsSection.style.display = 'none';
+            input.disabled = true;
+            attachBtn.disabled = true;
 
             let width = 0;
-            const duration = 2000; // 2 seconds fake load
+            const duration = 2000;
             const intervalTime = 20;
             const steps = duration / intervalTime;
             const increment = 100 / steps;
@@ -288,13 +258,54 @@
                     setTimeout(() => {
                         progressSection.style.display = 'none';
                         resultsSection.style.display = 'block';
+
+                        // Fake Data Population
+                        if (hasFiles && !hasUrl) {
+                            document.getElementById('videoTitleElement').innerText = selectedFiles.length > 1 ? "Multiple Documents Analysis" : selectedFiles[0].name;
+                            document.getElementById('channelNameElement').innerText = "Uploaded Files";
+                            document.getElementById('videoSummaryElement').innerHTML = `
+                                <strong>Executive Summary:</strong><br>
+                                The analysis of the uploaded ${selectedFiles.length} file(s) reveals a comprehensive strategy for system architecture optimization. The documents focus heavily on scalability and modular design patterns.<br><br>
+                                <strong>Key Insights:</strong>
+                                <ul style="margin-top: 0.5rem; padding-left: 1.2rem; margin-bottom: 0.5rem;">
+                                    <li><strong>Microservices:</strong> A shift towards decoupled services to improve maintainability.</li>
+                                    <li><strong>Database Sharding:</strong> Proposed implementation to handle projected 10x data growth.</li>
+                                    <li><strong>Security Protocol:</strong> Enhanced authentication flows using OAuth 2.0.</li>
+                                </ul>
+                                <strong>Conclusion:</strong><br>
+                                The documents suggest a robust technical roadmap. Immediate action is recommended for the database migration phase.
+                             `;
+                        } else {
+                            // URL Mode
+                            document.getElementById('videoTitleElement').innerText = "How to Build a SaaS in 2 Weeks";
+                            document.getElementById('channelNameElement').innerText = "Nutzy Craft";
+                            document.getElementById('videoSummaryElement').innerHTML = `
+                                <strong>Video Overview:</strong><br>
+                                This video breaks down the rapid development process of a SaaS product, covering ideation, tech stack selection (Next.js, Supabase), core feature implementation, and launch strategies.<br><br>
+                                <strong>Key Takeaways:</strong>
+                                <ul style="margin-top: 0.5rem; padding-left: 1.2rem; margin-bottom: 0.5rem;">
+                                    <li><strong>Speed over Perfection:</strong> Prioritize shipping a MVP (Minimum Viable Product) to get user feedback early.</li>
+                                    <li><strong>Tech Stack:</strong> Leverage managed services like Supabase to avoid backend complexity.</li>
+                                    <li><strong>Marketing:</strong> Start building an audience before the product is fully ready.</li>
+                                </ul>
+                                <strong>Verdict:</strong><br>
+                                A highly practical guide for solo developers looking to validate ideas quickly without getting bogged down in infrastructure.
+                             `;
+                        }
+
+                        // Reset Buttons
                         btn.disabled = false;
                         btn.innerText = 'Analyze';
                         btn.classList.remove('analyzing-state');
+                        input.disabled = false;
+                        attachBtn.disabled = false;
                     }, 500);
                 }
             }, intervalTime);
-        });
+        }
+
+        // Attach event listener
+        btn.addEventListener('click', startAnalysis);
     </script>
 </body>
 

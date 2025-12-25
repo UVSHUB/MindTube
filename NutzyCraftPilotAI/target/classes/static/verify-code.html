@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code - Nutzy Craft PilotAI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--labs-grey);
+        }
+
+        .code-input-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--labs-border);
+            font-family: var(--font-head);
+            transition: border-color 0.2s;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--labs-blue);
+        }
+    </style>
+</head>
+
+<body style="background-color: var(--labs-off-white);">
+    <div class="container"
+        style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="card" style="padding: 3rem; text-align: center; max-width: 440px; width: 100%; background: white;">
+            <a href="index.html" class="logo" style="justify-content: center; margin-bottom: 2rem;">
+                <img src="images/logo.jpg" alt="Nutzy Craft Logo" style="height: 48px; border-radius: 50%;">
+                Nutzy Craft <span>PilotAI</span>
+            </a>
+
+            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Check your email</h2>
+            <p style="margin-bottom: 2rem;">We sent a verification code to your email.</p>
+
+            <form action="reset-password.html">
+                <div class="code-input-container">
+                    <input type="text" class="code-input" maxlength="1" required>
+                    <input type="text" class="code-input" maxlength="1" required>
+                    <input type="text" class="code-input" maxlength="1" required>
+                    <input type="text" class="code-input" maxlength="1" required>
+                    <input type="text" class="code-input" maxlength="1" required>
+                    <input type="text" class="code-input" maxlength="1" required>
+                </div>
+                <button type="submit" id="verifyBtn" class="btn btn-primary" style="width: 100%;">Verify Email</button>
+            </form>
+            <div id="verifyResponse" style="margin-top: 1rem; display: none;"></div>
+
+            <script>
+                // Auto-focus next input
+                const inputs = document.querySelectorAll('.code-input');
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        if (e.target.value.length === 1 && index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    });
+
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    });
+                });
+
+                document.querySelector('form').addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Get email from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const email = urlParams.get('email');
+
+                    if (!email) {
+                        alert('Email not found in URL. Please try signing up again.');
+                        return;
+                    }
+
+                    let code = '';
+                    inputs.forEach(i => code += i.value);
+
+                    const btn = document.getElementById('verifyBtn');
+                    const responseDiv = document.getElementById('verifyResponse');
+
+                    btn.disabled = true;
+                    btn.innerText = 'Verifying...';
+                    responseDiv.style.display = 'none';
+
+                    try {
+                        const response = await fetch('/api/auth/verify', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email, code })
+                        });
+                        const result = await response.json();
+
+                        responseDiv.style.display = 'block';
+                        responseDiv.innerText = result.message;
+
+                        if (result.success) {
+                            responseDiv.style.color = '#137333';
+                            // Store user info if returned
+                            if (result.userId) {
+                                localStorage.setItem('user', JSON.stringify({ id: result.userId, name: result.fullName }));
+                            }
+                            setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                        } else {
+                            responseDiv.style.color = '#d93025';
+                            btn.disabled = false;
+                            btn.innerText = 'Verify Email';
+                        }
+                    } catch (error) {
+                        responseDiv.style.display = 'block';
+                        responseDiv.style.color = '#d93025';
+                        responseDiv.innerText = 'Something went wrong';
+                        btn.disabled = false;
+                        btn.innerText = 'Verify Email';
+                    }
+                });
+            </script>
+
+            <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                Didn't receive the email? <a href="#" id="resendLink"
+                    style="color: var(--labs-blue); font-weight: 600;">Click to resend</a>
+            </p>
+
+            <script>
+                document.getElementById('resendLink').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const email = urlParams.get('email');
+
+                    if (!email) {
+                        alert('Email not found. Cannot resend code.');
+                        return;
+                    }
+
+                    const link = e.target;
+                    const originalText = link.innerText;
+                    link.innerText = 'Sending...';
+                    link.style.pointerEvents = 'none';
+
+                    try {
+                        const response = await fetch('/api/auth/resend-code', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email })
+                        });
+                        const result = await response.json();
+                        alert(result.message);
+                    } catch (error) {
+                        alert('Failed to resend code.');
+                    } finally {
+                        link.innerText = originalText;
+                        link.style.pointerEvents = 'auto';
+                    }
+                });
+            </script>
+
+            <div style="margin-top: 2rem; border-top: 1px solid var(--labs-border); padding-top: 1.5rem;">
+                <a href="login.html" style="color: var(--labs-grey); font-size: 0.9rem; text-decoration: none;">← Back
+                    to Sign In</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

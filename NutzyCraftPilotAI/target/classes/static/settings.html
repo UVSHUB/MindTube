@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Nutzy Craft PilotAI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body style="background-color: #f8f9fa;">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="images/logo.jpg" alt="Antigravity Acorn" style="height: 32px; border-radius: 50%;">
+            Nutzy Craft <span>PilotAI</span>
+        </a>
+
+
+
+        <div style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
+            <!-- Profile -->
+            <a href="settings.html"
+                style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill); text-decoration: none; color: inherit; transition: box-shadow 0.2s;">
+                <span style="font-size: 0.9rem; font-weight: 500;">Sayura Thejan</span>
+                <div
+                    style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="console-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section-title">Workspace</div>
+            <a href="dashboard.html" class="sidebar-link">Analysis Console</a>
+            <a href="saved-reports.html" class="sidebar-link">Saved Reports</a>
+            <a href="trends.html" class="sidebar-link">Trends</a>
+
+            <div class="sidebar-section-title">Account</div>
+            <a href="settings.html" class="sidebar-link active">Settings</a>
+
+            <a href="signout.html" class="sidebar-link" style="color: #d93025; margin-top: 1rem;">Sign Out</a>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Account Settings</h2>
+
+            <div class="grid grid-2" style="gap: 2rem;">
+                <!-- Profile Information -->
+                <div class="card" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem;">Profile Information</h3>
+                    <form onsubmit="event.preventDefault();">
+                        <!-- Profile Photo Section -->
+                        <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                            <div
+                                style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
+                            </div>
+                            <div>
+                                <h4 style="font-size: 1rem; margin-bottom: 0.5rem; font-weight: 500;">Profile Photo</h4>
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <button class="btn btn-outline"
+                                        style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 8px;"
+                                        onclick="document.getElementById('fileInput').click()">Change</button>
+                                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
+                                    <button class="btn"
+                                        style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #d93025; background: transparent; border: 1px solid transparent; border-radius: 8px;"
+                                        onclick="removePhoto()">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;">Full
+                                Name</label>
+                            <input type="text" id="profileName"
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem;">
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;">Email</label>
+                            <input type="email" id="profileEmail" disabled
+                                style="background: #e9ecef; cursor: not-allowed; width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem;">
+                        </div>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+
+
+
+        </main>
+    </div>
+    <script>
+        async function loadSettings() {
+            const userJson = localStorage.getItem('user');
+            if (!userJson) {
+                window.location.href = 'login.html';
+                return;
+            }
+            const user = JSON.parse(userJson);
+
+            try {
+                const res = await fetch(`/api/user/me?userId=${user.id}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    // Update Navbar
+                    const profileNameNav = document.querySelector('.navbar a[href="settings.html"] span');
+                    if (profileNameNav) profileNameNav.innerText = data.fullName;
+
+                    // Update Form
+                    // inputs[0] is file (skip)
+                    const nameInput = document.getElementById('profileName');
+                    const emailInput = document.getElementById('profileEmail');
+
+                    if (nameInput) nameInput.value = data.fullName || 'User';
+                    if (emailInput) emailInput.value = data.email || 'No Email';
+
+                    // Display Avatar
+                    if (data.avatarUrl) {
+                        const avatarDiv = document.querySelector('.card div[style*="width: 80px"]');
+                        if (avatarDiv) {
+                            avatarDiv.style.background = 'none'; // remove gradient
+                            avatarDiv.style.backgroundImage = `url(${data.avatarUrl})`;
+                            avatarDiv.style.backgroundSize = 'cover';
+                            avatarDiv.style.backgroundPosition = 'center';
+                        }
+                        // Also Navbar
+                        const navAvatar = document.querySelector('.navbar div[style*="width: 32px"]');
+                        if (navAvatar) {
+                            navAvatar.style.background = 'none';
+                            navAvatar.style.backgroundImage = `url(${data.avatarUrl})`;
+                            navAvatar.style.backgroundSize = 'cover';
+                            navAvatar.style.backgroundPosition = 'center';
+                        }
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function saveSettings() {
+            const userJson = localStorage.getItem('user');
+            if (!userJson) return;
+            const user = JSON.parse(userJson);
+
+            const nameInput = document.getElementById('profileName');
+            const emailInput = document.getElementById('profileEmail');
+            const fullName = nameInput.value;
+            const email = emailInput.value;
+            const btn = document.querySelector('form button');
+
+            btn.disabled = true;
+            btn.innerText = 'Saving...';
+
+            try {
+                const res = await fetch('/api/user/me', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: user.id,
+                        fullName: fullName,
+                        email: email
+                    })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Profile updated!');
+                    // Update local storage name if changed
+                    user.name = fullName;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    location.reload(); // Refresh to update UI
+                } else {
+                    alert('Failed to update.');
+                }
+            } catch (e) {
+                alert('Error saving settings.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save Changes';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSettings);
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings();
+        });
+
+        // Handle File Selection
+        document.getElementById('fileInput').addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const base64 = e.target.result;
+                    // Update preview immediately
+                    const preview = document.querySelector('.card .linear-gradient, .card img[style*="border-radius: 50%"]');
+                    // Helper to replace div with img if needed
+                    // Actually let's just create a dynamic update
+                    // We will save immediately or wait for save button?
+                    // Let's attach it to a global var to be saved.
+                    window.newAvatarBase64 = base64;
+
+                    // Update UI
+                    const avatarDiv = document.querySelector('.card div[style*="width: 80px"]');
+                    if (avatarDiv) {
+                        avatarDiv.style.backgroundImage = `url(${base64})`;
+                        avatarDiv.style.backgroundSize = 'cover';
+                        avatarDiv.style.backgroundPosition = 'center';
+                        avatarDiv.innerHTML = ''; // modify if it was a div
+                    }
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        async function saveSettings() {
+            const userJson = localStorage.getItem('user');
+            if (!userJson) return;
+            const user = JSON.parse(userJson);
+
+            const btn = document.querySelector('form button');
+            btn.disabled = true;
+            btn.innerText = 'Saving...';
+
+            const payload = { id: user.id };
+            // Only add avatar if changed
+            if (window.newAvatarBase64) {
+                payload.avatarUrl = window.newAvatarBase64;
+            }
+
+            try {
+                const res = await fetch('/api/user/me', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Profile photo updated!');
+                    location.reload();
+                } else {
+                    alert('Failed to update.');
+                }
+            } catch (e) {
+                alert('Error saving settings.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save Changes';
+            }
+        }
+
+        async function removePhoto() {
+            if (!confirm("Remove profile photo?")) return;
+            // Send empty avatarUrl
+            try {
+                const userJson = localStorage.getItem('user');
+                const user = JSON.parse(userJson);
+                const res = await fetch('/api/user/me', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: user.id, avatarUrl: '' })
+                });
+                if (res.ok) {
+                    location.reload();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function deleteAccount() {
+            const confirmName = prompt("This action is permanent.\nType 'DELETE' to confirm deletion of your account.");
+            if (confirmName === 'DELETE') {
+                alert("Account deletion request submitted. (Simulated)");
+                // In real app: DELETE /api/user/me -> clear storage -> redirect index
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -3,7 +3,29 @@
   <component name="ChangeListManager">
     <list default="true" id="d6c7c078-e1de-4b4a-b318-14f6b23c6798" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/components.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/dashboard.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/forgot-password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/hook_graph.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/semantic_dashboard.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/trend_chart.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/hero-bg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pricing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reset-password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saved-reports.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/signout.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/signup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trends.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/verify-code.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

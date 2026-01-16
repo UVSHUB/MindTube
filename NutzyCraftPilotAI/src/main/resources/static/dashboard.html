@@ -28,9 +28,9 @@
             <!-- Profile -->
             <a href="settings.html"
                 style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill); text-decoration: none; color: inherit; transition: box-shadow 0.2s;">
-                <span style="font-size: 0.9rem; font-weight: 500;">Sayura Thejan</span>
+                <span style="font-size: 0.9rem; font-weight: 500;"></span>
                 <div
-                    style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
+                    style="width: 32px; height: 32px; border-radius: 50%;">
                 </div>
             </a>
         </div>
@@ -339,16 +339,16 @@
                         const profileName = document.querySelector('.navbar a[href="settings.html"] span');
                         const profileAvatar = document.querySelector('.navbar a[href="settings.html"] div');
 
-                        if (profileName) profileName.innerText = data.fullName;
+                        if (profileName) profileName.innerText = data.fullName || user.name || "User";
                         if (profileAvatar && data.avatarUrl) {
-                            profileAvatar.style.background = `url('${data.avatarUrl}') center/cover no-repeat`;
+                            profileAvatar.style.background = 'none';
+                            profileAvatar.style.backgroundImage = `url('${data.avatarUrl}')`;
+                            profileAvatar.style.backgroundSize = 'cover';
+                            profileAvatar.style.backgroundPosition = 'center';
                         } else if (profileAvatar) {
-                            profileAvatar.innerText = data.fullName.charAt(0).toUpperCase();
-                            profileAvatar.style.display = "flex";
-                            profileAvatar.style.alignItems = "center";
-                            profileAvatar.style.justifyContent = "center";
-                            profileAvatar.style.color = "white";
-                            profileAvatar.style.fontWeight = "bold";
+                            // Use gradient if no avatar
+                            profileAvatar.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                            profileAvatar.style.backgroundImage = 'none';
                         }
                     }
                 } else {

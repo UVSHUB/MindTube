@@ -28,9 +28,9 @@
             <!-- Profile -->
             <a href="settings.html"
                 style="display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.25rem 0.25rem 1rem; background: #fff; border: 1px solid var(--labs-border); border-radius: var(--radius-pill); text-decoration: none; color: inherit; transition: box-shadow 0.2s;">
-                <span style="font-size: 0.9rem; font-weight: 500;">Sayura Thejan</span>
+                <span style="font-size: 0.9rem; font-weight: 500;"></span>
                 <div
-                    style="width: 32px; height: 32px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
+                    style="width: 32px; height: 32px; border-radius: 50%;">
                 </div>
             </a>
         </div>
@@ -91,6 +91,41 @@
     </main>
     </div>
     <script>
+        async function loadUserProfile() {
+            const userJson = localStorage.getItem('user');
+            if (!userJson) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(userJson);
+            try {
+                const res = await fetch(`/api/user/me?userId=${user.id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success) {
+                        // Update Navbar
+                        const profileName = document.querySelector('.navbar a[href="settings.html"] span');
+                        const profileAvatar = document.querySelector('.navbar a[href="settings.html"] div');
+
+                        if (profileName) profileName.innerText = data.fullName || user.name || "User";
+                        if (profileAvatar && data.avatarUrl) {
+                            profileAvatar.style.background = 'none';
+                            profileAvatar.style.backgroundImage = `url('${data.avatarUrl}')`;
+                            profileAvatar.style.backgroundSize = 'cover';
+                            profileAvatar.style.backgroundPosition = 'center';
+                        } else if (profileAvatar) {
+                            // Keep gradient if no avatar
+                            profileAvatar.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                            profileAvatar.style.backgroundImage = 'none';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading user profile:', e);
+            }
+        }
+
         async function loadTrends() {
             const userJson = localStorage.getItem('user');
             if (!userJson) {
@@ -98,10 +133,6 @@
                 return;
             }
             const user = JSON.parse(userJson);
-
-            // Fetch Profile for Navbar
-            const profileName = document.querySelector('.navbar a[href="settings.html"] span');
-            if (profileName) profileName.innerText = user.name || "User";
 
             try {
                 const res = await fetch(`/api/trends?userId=${user.id}`);
@@ -145,7 +176,10 @@
 
             } catch (e) { console.error(e); }
         }
-        document.addEventListener('DOMContentLoaded', loadTrends);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserProfile();
+            loadTrends();
+        });
     </script>
     </div>
     </main>

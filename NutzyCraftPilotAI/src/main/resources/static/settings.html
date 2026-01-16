@@ -61,16 +61,16 @@
                     <form onsubmit="event.preventDefault();">
                         <!-- Profile Photo Section -->
                         <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
-                            <div
+                            <div id="avatarPreview"
                                 style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%;">
                             </div>
                             <div>
                                 <h4 style="font-size: 1rem; margin-bottom: 0.5rem; font-weight: 500;">Profile Photo</h4>
                                 <div style="display: flex; gap: 0.75rem;">
-                                    <button class="btn btn-outline"
+                                    <button class="btn btn-outline" type="button"
                                         style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 8px;"
                                         onclick="document.getElementById('fileInput').click()">Change</button>
-                                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
+                                    <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event)">
                                     <button class="btn"
                                         style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #d93025; background: transparent; border: 1px solid transparent; border-radius: 8px;"
                                         onclick="removePhoto()">Remove</button>
@@ -126,13 +126,14 @@
                     if (emailInput) emailInput.value = data.email || 'No Email';
 
                     // Display Avatar
-                    if (data.avatarUrl) {
-                        const avatarDiv = document.querySelector('.card div[style*="width: 80px"]');
+                    const avatarDiv = document.getElementById('avatarPreview');
+                    if (data.avatarUrl && data.avatarUrl.trim() !== '') {
                         if (avatarDiv) {
                             avatarDiv.style.background = 'none'; // remove gradient
                             avatarDiv.style.backgroundImage = `url(${data.avatarUrl})`;
                             avatarDiv.style.backgroundSize = 'cover';
                             avatarDiv.style.backgroundPosition = 'center';
+                            avatarDiv.style.border = 'none';
                         }
                         // Also Navbar
                         const navAvatar = document.querySelector('.navbar div[style*="width: 32px"]');
@@ -142,9 +143,83 @@
                             navAvatar.style.backgroundSize = 'cover';
                             navAvatar.style.backgroundPosition = 'center';
                         }
+                    } else {
+                        // If no avatar, ensure gradient is visible
+                        if (avatarDiv) {
+                            avatarDiv.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                            avatarDiv.style.backgroundImage = 'none';
+                        }
                     }
                 }
             } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSettings);
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveSettings();
+        });
+
+        // Handle File Selection - Function to be called by onchange
+        function handleFileSelect(event) {
+            const fileInput = event.target;
+            console.log('File input change event fired', fileInput.files);
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                console.log('File selected:', file.name, file.type, file.size, 'bytes');
+                
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    fileInput.value = ''; // Clear selection
+                    return;
+                }
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image file is too large. Please select an image smaller than 5MB');
+                    fileInput.value = ''; // Clear selection
+                    return;
+                }
+                
+                // Use FileReader only for preview (not for upload)
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const base64 = e.target.result; // Only for preview display
+                    console.log('✅ File ready for direct upload to Cloudinary');
+
+                    // Update UI preview immediately
+                    const avatarDiv = document.getElementById('avatarPreview');
+                    if (avatarDiv) {
+                        avatarDiv.style.background = 'none'; // Remove gradient
+                        avatarDiv.style.backgroundImage = `url(${base64})`;
+                        avatarDiv.style.backgroundSize = 'cover';
+                        avatarDiv.style.backgroundPosition = 'center';
+                        avatarDiv.style.border = 'none';
+                        console.log('✅ Avatar preview updated in card');
+                    } else {
+                        console.warn('⚠️ Could not find avatarPreview element');
+                    }
+
+                    // Also update navbar preview
+                    const navAvatar = document.querySelector('.navbar div[style*="width: 32px"]');
+                    if (navAvatar) {
+                        navAvatar.style.background = 'none';
+                        navAvatar.style.backgroundImage = `url(${base64})`;
+                        navAvatar.style.backgroundSize = 'cover';
+                        navAvatar.style.backgroundPosition = 'center';
+                        console.log('✅ Avatar preview updated in navbar');
+                    }
+                };
+                reader.onerror = function(e) {
+                    console.error('❌ Error reading file:', e);
+                    alert('Error reading the selected file. Please try again.');
+                };
+                reader.readAsDataURL(file); // Only for preview, not for upload
+            } else {
+                console.log('⚠️ No file selected');
+            }
         }
 
         async function saveSettings() {
@@ -157,11 +232,13 @@
             const fullName = nameInput.value;
             const email = emailInput.value;
             const btn = document.querySelector('form button');
+            const fileInput = document.getElementById('fileInput');
 
             btn.disabled = true;
             btn.innerText = 'Saving...';
 
             try {
+                // First, update profile info (name, email) if changed
                 const res = await fetch('/api/user/me', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -171,87 +248,57 @@
                         email: email
                     })
                 });
+                
                 const result = await res.json();
-                if (result.success) {
-                    alert('Profile updated!');
-                    // Update local storage name if changed
-                    user.name = fullName;
-                    localStorage.setItem('user', JSON.stringify(user));
-                    location.reload(); // Refresh to update UI
-                } else {
-                    alert('Failed to update.');
+                console.log('Profile update response:', result);
+                
+                if (!res.ok) {
+                    console.error('Server returned error status:', res.status, result);
+                    alert('Failed to update profile: ' + (result.message || `Server error ${res.status}`));
+                    return;
                 }
-            } catch (e) {
-                alert('Error saving settings.');
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'Save Changes';
-            }
-        }
 
-        document.addEventListener('DOMContentLoaded', loadSettings);
-        document.querySelector('form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            saveSettings();
-        });
+                // Then, upload avatar file directly to Cloudinary if a new file was selected
+                if (fileInput.files && fileInput.files[0]) {
+                    console.log('Uploading avatar file directly to Cloudinary...');
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    formData.append('userId', user.id);
 
-        // Handle File Selection
-        document.getElementById('fileInput').addEventListener('change', function () {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const base64 = e.target.result;
-                    // Update preview immediately
-                    const preview = document.querySelector('.card .linear-gradient, .card img[style*="border-radius: 50%"]');
-                    // Helper to replace div with img if needed
-                    // Actually let's just create a dynamic update
-                    // We will save immediately or wait for save button?
-                    // Let's attach it to a global var to be saved.
-                    window.newAvatarBase64 = base64;
+                    const avatarRes = await fetch('/api/user/me/avatar', {
+                        method: 'POST',
+                        body: formData
+                        // Don't set Content-Type header - browser will set it with boundary automatically
+                    });
 
-                    // Update UI
-                    const avatarDiv = document.querySelector('.card div[style*="width: 80px"]');
-                    if (avatarDiv) {
-                        avatarDiv.style.backgroundImage = `url(${base64})`;
-                        avatarDiv.style.backgroundSize = 'cover';
-                        avatarDiv.style.backgroundPosition = 'center';
-                        avatarDiv.innerHTML = ''; // modify if it was a div
+                    const avatarResult = await avatarRes.json();
+                    console.log('Avatar upload response:', avatarResult);
+                    
+                    if (avatarResult.success) {
+                        console.log('✅ Avatar uploaded successfully:', avatarResult.avatarUrl);
+                        user.avatarUrl = avatarResult.avatarUrl;
+                    } else {
+                        console.error('❌ Failed to upload avatar:', avatarResult.message);
+                        alert('Profile updated, but avatar upload failed: ' + avatarResult.message);
                     }
-                }
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-
-        async function saveSettings() {
-            const userJson = localStorage.getItem('user');
-            if (!userJson) return;
-            const user = JSON.parse(userJson);
-
-            const btn = document.querySelector('form button');
-            btn.disabled = true;
-            btn.innerText = 'Saving...';
-
-            const payload = { id: user.id };
-            // Only add avatar if changed
-            if (window.newAvatarBase64) {
-                payload.avatarUrl = window.newAvatarBase64;
-            }
-
-            try {
-                const res = await fetch('/api/user/me', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-                if (result.success) {
-                    alert('Profile photo updated!');
-                    location.reload();
                 } else {
-                    alert('Failed to update.');
+                    console.log('No new avatar file selected, skipping upload');
                 }
+
+                // Update local storage
+                user.name = fullName;
+                user.fullName = fullName;
+                localStorage.setItem('user', JSON.stringify(user));
+
+                alert('Profile updated successfully!');
+                // Clear file input
+                if (fileInput) fileInput.value = '';
+                // Reload to show updated avatar from Cloudinary
+                location.reload();
+
             } catch (e) {
-                alert('Error saving settings.');
+                console.error('Error saving settings:', e);
+                alert('Error saving settings: ' + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Save Changes';

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,14 +20,14 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Map<String, Object>> getMyProfile(@RequestParam(required = false) Long userId,
+    public ResponseEntity<Map<String, Object>> getMyProfile(@RequestParam(required = false) String userId,
             @RequestParam(required = false) String email) {
         // In a real app, get ID from Session/Principal.
         // Here, we trust the client for "dev mode" simplicity, or use query param.
 
         User user = null;
         if (userId != null) {
-            user = userRepository.findById(userId).orElse(null);
+            user = userRepository.findById(UUID.fromString(userId)).orElse(null);
         } else if (email != null) {
             user = userRepository.findByEmail(email).orElse(null);
         }
@@ -53,7 +54,7 @@ public class UserController {
     @PutMapping("/me")
     public ResponseEntity<Map<String, Object>> updateMyProfile(@RequestBody Map<String, Object> payload) {
         // Again, trusting client ID for MVP dev mode
-        Long userId = payload.get("id") != null ? Long.valueOf(payload.get("id").toString()) : null;
+        UUID userId = payload.get("id") != null ? UUID.fromString(payload.get("id").toString()) : null;
         String emailObj = (String) payload.get("emailQuery"); // Alternative if ID missing
 
         User user = null;

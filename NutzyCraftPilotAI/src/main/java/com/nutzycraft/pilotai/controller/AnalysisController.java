@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/analysis")
@@ -26,8 +27,8 @@ public class AnalysisController {
 
     // GET History
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getHistory(@RequestParam Long userId) {
-        List<Analysis> history = analysisRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    public ResponseEntity<Map<String, Object>> getHistory(@RequestParam String userId) {
+        List<Analysis> history = analysisRepository.findByUser_IdOrderByCreatedAtDesc(UUID.fromString(userId));
 
         // For simple response, we return list directly.
         // Or wrap in success: true
@@ -39,15 +40,15 @@ public class AnalysisController {
 
     // DELETE Report
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
-        analysisRepository.deleteById(id);
+    public ResponseEntity<Void> deleteReport(@PathVariable String id) {
+        analysisRepository.deleteById(UUID.fromString(id));
         return ResponseEntity.ok().build();
     }
 
     // POST Analyze (Simulation)
     @PostMapping
     public ResponseEntity<Map<String, Object>> analyze(@RequestBody Map<String, Object> payload) {
-        Long userId = Long.valueOf(payload.get("userId").toString());
+        UUID userId = UUID.fromString(payload.get("userId").toString());
         String url = (String) payload.get("url");
 
         User user = userRepository.findById(userId).orElse(null);

@@ -5,12 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface AnalysisRepository extends JpaRepository<Analysis, Long> {
-    List<Analysis> findByUserIdOrderByCreatedAtDesc(Long userId);
+public interface AnalysisRepository extends JpaRepository<Analysis, UUID> {
+    List<Analysis> findByUser_IdOrderByCreatedAtDesc(UUID userId);
 
-    long countByUserId(Long userId);
+    long countByUser_Id(UUID userId);
 
-    Analysis findTopByUserIdOrderByCraftScoreDesc(Long userId);
+    Analysis findTopByUser_IdOrderByCraftScoreDesc(UUID userId);
 }

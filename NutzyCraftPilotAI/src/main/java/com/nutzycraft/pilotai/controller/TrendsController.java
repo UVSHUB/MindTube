@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/trends")
@@ -21,11 +22,12 @@ public class TrendsController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getTrends(@RequestParam Long userId) {
+    public ResponseEntity<Map<String, Object>> getTrends(@RequestParam String userId) {
+        UUID userIdUuid = UUID.fromString(userId);
         // Fetch real data
-        long totalAnalyses = analysisRepository.countByUserId(userId);
-        List<Analysis> recentAnalyses = analysisRepository.findByUserIdOrderByCreatedAtDesc(userId);
-        Analysis topAnalysis = analysisRepository.findTopByUserIdOrderByCraftScoreDesc(userId);
+        long totalAnalyses = analysisRepository.countByUser_Id(userIdUuid);
+        List<Analysis> recentAnalyses = analysisRepository.findByUser_IdOrderByCreatedAtDesc(userIdUuid);
+        Analysis topAnalysis = analysisRepository.findTopByUser_IdOrderByCraftScoreDesc(userIdUuid);
 
         // Calculate Stats
         int avgCraftScore = 0;

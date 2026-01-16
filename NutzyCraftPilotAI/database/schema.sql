@@ -2,13 +2,20 @@
 create extension if not exists "uuid-ossp";
 
 -- 1. Users Table (Profile Table)
--- Note: We link to auth.users. id should NOT have a default v4 here;
--- it should match the auth.uid().
+-- Note: This schema supports Spring Boot authentication
+-- If using Supabase Auth instead, change to:
+--   id uuid references auth.users on delete cascade primary key,
+--   and remove email, password, verification_code, is_verified columns
 create table public.users (
-                              id uuid references auth.users on delete cascade primary key,
+                              id uuid default uuid_generate_v4() primary key,
                               full_name text,
                               avatar_url text,
-                              created_at timestamp with time zone default timezone('utc'::text, now()) not null
+                              created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+                              -- Additional fields for Spring Boot authentication
+                              email varchar(255) unique,
+                              password varchar(255),
+                              verification_code varchar(255),
+                              is_verified boolean default false
 );
 
 -- 2. Analysis Reports
@@ -76,6 +83,8 @@ create policy "Anyone can submit contact form"
   with check ( true );
 
   -- 1. Create the function that handles the new user
+  -- Note: This trigger is for Supabase Auth integration
+  -- If using Spring Boot authentication only, you can skip this trigger
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
@@ -96,6 +105,7 @@ end;
 $$ language plpgsql security definer;
 
 -- 2. Create the trigger to run the function after a signup
+-- Note: Only works if using Supabase Auth (auth.users table exists)
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();

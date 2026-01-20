@@ -1,0 +1,16 @@
+# Secrets
+application.properties
+.env
+.env.local
+
+# Java
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log

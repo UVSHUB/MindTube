@@ -48,6 +48,7 @@ buildNumber.properties
 .env
 .env.local
 .env.*.local
+.applocation.properties
 
 # OS files
 Thumbs.db

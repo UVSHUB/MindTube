@@ -127,54 +127,55 @@
         }
 
         async function loadTrends() {
-            const userJson = localStorage.getItem('user');
-            if (!userJson) {
-                window.location.href = 'login.html';
-                return;
+            // NOTE: Python backend needs endpoints for aggregation stats.
+            // Using placeholder data for immediate demonstration.
+            
+            const d = {
+                totalAnalyses: 12,
+                thisWeekCount: 3,
+                avgCraftScore: 7.2,
+                craftScoreTrend: "+0.5",
+                topHookScore: 8.5,
+                topHookVideo: "Latest Video Analysis",
+                chart: [
+                    { label: 'Week 1', value: 65 },
+                    { label: 'Week 2', value: 72 },
+                    { label: 'Week 3', value: 68 },
+                    { label: 'Week 4', value: 80 }
+                ]
+            };
+
+            // Cards
+            const cards = document.querySelectorAll('.grid-3 .card');
+            if (cards[0]) {
+                cards[0].children[1].innerText = d.totalAnalyses;
+                cards[0].children[2].innerText = `+${d.thisWeekCount} this week`;
             }
-            const user = JSON.parse(userJson);
+            if (cards[1]) {
+                cards[1].children[1].innerText = d.avgCraftScore;
+                cards[1].children[2].innerText = `${d.craftScoreTrend} vs last month`;
+            }
+            if (cards[2]) {
+                cards[2].children[1].innerText = d.topHookScore;
+                cards[2].children[2].innerText = `"${d.topHookVideo}"`;
+            }
 
-            try {
-                const res = await fetch(`/api/trends?userId=${user.id}`);
-                const result = await res.json();
+            // Chart
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = '';
 
-                if (result.success && result.data) {
-                    const d = result.data;
-
-                    // Cards
-                    const cards = document.querySelectorAll('.grid-3 .card');
-                    if (cards[0]) {
-                        cards[0].children[1].innerText = d.totalAnalyses;
-                        cards[0].children[2].innerText = `+${d.thisWeekCount} this week`;
-                    }
-                    if (cards[1]) {
-                        cards[1].children[1].innerText = d.avgCraftScore;
-                        cards[1].children[2].innerText = `${d.craftScoreTrend} vs last month`;
-                    }
-                    if (cards[2]) {
-                        cards[2].children[1].innerText = d.topHookScore;
-                        cards[2].children[2].innerText = `"${d.topHookVideo}"`;
-                    }
-
-                    // Chart
-                    const chartContainer = document.getElementById('chartContainer');
-                    chartContainer.innerHTML = '';
-
-                    d.chart.forEach(point => {
-                        const bar = `
-                            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 10%;">
-                                <div style="height: 180px; width: 100%; background: #e8eaed; border-radius: 4px 4px 0 0; position: relative;">
-                                    <div style="position: absolute; bottom: 0; width: 100%; height: ${point.value}%; background: ${point.value >= 90 ? '#1a73e8' : '#8ab4f8'}; border-radius: 4px 4px 0 0;">
-                                    </div>
-                                </div>
-                                <span style="font-size: 0.8rem; color: var(--labs-grey);">${point.label}</span>
+            d.chart.forEach(point => {
+                const bar = `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 10%;">
+                        <div style="height: 180px; width: 100%; background: #e8eaed; border-radius: 4px 4px 0 0; position: relative;">
+                            <div style="position: absolute; bottom: 0; width: 100%; height: ${point.value}%; background: ${point.value >= 75 ? '#1a73e8' : '#8ab4f8'}; border-radius: 4px 4px 0 0;">
                             </div>
-                        `;
-                        chartContainer.insertAdjacentHTML('beforeend', bar);
-                    });
-                }
-
-            } catch (e) { console.error(e); }
+                        </div>
+                        <span style="font-size: 0.8rem; color: var(--labs-grey);">${point.label}</span>
+                    </div>
+                `;
+                chartContainer.insertAdjacentHTML('beforeend', bar);
+            });
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadUserProfile();

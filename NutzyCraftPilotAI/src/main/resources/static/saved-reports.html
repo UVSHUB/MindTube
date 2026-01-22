@@ -117,47 +117,37 @@
         }
 
         async function loadReports() {
-            const userJson = localStorage.getItem('user');
-            if (!userJson) {
-                window.location.href = 'login.html';
-                return;
+            // Load from LocalStorage
+            const savedReports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+
+            const tbody = document.getElementById('reportsTableBody');
+            tbody.innerHTML = '';
+
+            if (savedReports.length > 0) {
+                savedReports.forEach(report => {
+                    const date = new Date(report.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
+                    const row = `
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 1rem;">
+                                <div style="font-weight: 500;">${report.title}</div>
+                                <div style="font-size: 0.85rem; color: var(--labs-grey);">${report.videoUrl}</div>
+                            </td>
+                            <td style="padding: 1rem;">${date}</td>
+                            <td style="padding: 1rem;">
+                                <span style="font-weight: 700; color: ${getColorForScore(report.craftScore)};">${report.craftScore}</span>
+                            </td>
+                            <td style="padding: 1rem;"><span style="background: #e6f4ea; color: #137333; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 500;">Completed</span></td>
+                            <td style="padding: 1rem; text-align: right;">
+                                <button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick='viewReport(${JSON.stringify(report)})'>View</button>
+                                <button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; color: #d93025; background: none; border: none; cursor: pointer;" onclick="deleteReport(${report.id})">Delete</button>
+                            </td>
+                        </tr>
+                     `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #666;">No saved reports found.</td></tr>';
             }
-            const user = JSON.parse(userJson);
-
-            try {
-                const res = await fetch(`/api/analysis?userId=${user.id}`);
-                const result = await res.json();
-
-                const tbody = document.getElementById('reportsTableBody');
-                tbody.innerHTML = '';
-
-                if (result.success && result.data && result.data.length > 0) {
-                    result.data.forEach(report => {
-                        const date = new Date(report.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
-                        const row = `
-                            <tr style="border-bottom: 1px solid #eee;">
-                                <td style="padding: 1rem;">
-                                    <div style="font-weight: 500;">${report.title}</div>
-                                    <div style="font-size: 0.85rem; color: var(--labs-grey);">${report.videoUrl}</div>
-                                </td>
-                                <td style="padding: 1rem;">${date}</td>
-                                <td style="padding: 1rem;">
-                                    <span style="font-weight: 700; color: ${getColorForScore(report.craftScore)};">${report.craftScore}</span>
-                                </td>
-                                <td style="padding: 1rem;"><span style="background: #e6f4ea; color: #137333; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 500;">Completed</span></td>
-                                <td style="padding: 1rem; text-align: right;">
-                                    <button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick='viewReport(${JSON.stringify(report)})'>View</button>
-                                    <button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; color: #d93025; background: none; border: none; cursor: pointer;" onclick="deleteReport(${report.id})">Delete</button>
-                                </td>
-                            </tr>
-                         `;
-                        tbody.insertAdjacentHTML('beforeend', row);
-                    });
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #666;">No saved reports found.</td></tr>';
-                }
-
-            } catch (e) { console.error(e); }
         }
 
         function getColorForScore(score) {
@@ -168,7 +158,11 @@
 
         async function deleteReport(id) {
             if (!confirm("Are you sure?")) return;
-            await fetch(`/api/analysis/${id}`, { method: 'DELETE' });
+            
+            let reports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+            reports = reports.filter(r => r.id !== id);
+            localStorage.setItem('savedReports', JSON.stringify(reports));
+            
             loadReports();
         }
 

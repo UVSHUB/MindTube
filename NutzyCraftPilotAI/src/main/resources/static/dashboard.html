@@ -122,33 +122,31 @@
                             style="color: var(--labs-grey); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
                             Craft Score</h4>
                         <div style="display: flex; align-items: baseline; gap: 1rem; margin-top: 1rem;">
-                            <span
-                                style="font-size: 4rem; font-family: var(--font-head); font-weight: 700; line-height: 1;">94</span>
-                            <span
-                                style="color: #137333; font-weight: 500; background: #e6f4ea; padding: 4px 8px; border-radius: 6px;">+12%
-                                vs avg</span>
+                            <span id="craftScoreValue"
+                                style="font-size: 4rem; font-family: var(--font-head); font-weight: 700; line-height: 1;">-</span>
+                            <span id="craftScoreDiff"
+                                style="color: #137333; font-weight: 500; background: #e6f4ea; padding: 4px 8px; border-radius: 6px;">--</span>
                         </div>
-                        <p style="margin-top: 1rem; font-size: 1.1rem;">Excellent retention velocity. Your hook is
-                            performing in the top 5% of your niche.</p>
+                        <p id="analysisComment" style="margin-top: 1rem; font-size: 1.1rem;">Analysis ready.</p>
                     </div>
 
                     <!-- Metrics Grid -->
                     <div class="grid grid-2" style="gap: 1rem;">
                         <div class="stat-card">
-                            <div style="font-size: 2rem; font-weight: 700;">High</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Pacing Score</div>
+                            <div id="hookScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Hook Score</div>
                         </div>
                         <div class="stat-card">
-                            <div style="font-size: 2rem; font-weight: 700;">8.5</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Clarity</div>
+                            <div id="seoScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">SEO Score</div>
                         </div>
                         <div class="stat-card">
-                            <div style="font-size: 2rem; font-weight: 700;">+40s</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Est. Retention</div>
+                            <div id="retentionScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Retention Score</div>
                         </div>
                         <div class="stat-card">
-                            <div style="font-size: 2rem; font-weight: 700;">A+</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Tone Match</div>
+                            <div id="toneMatchValue" style="font-size: 2rem; font-weight: 700;">-</div>
+                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Overall Grade</div>
                         </div>
                     </div>
                 </div>
@@ -232,11 +230,9 @@
 
             // Get user
             const userJson = localStorage.getItem('user');
-            if (!userJson) {
-                window.location.href = 'login.html';
-                return;
-            }
-            const user = JSON.parse(userJson);
+            // Allow testing without login for now if needed, or redirect
+            // if (!userJson) { window.location.href = 'login.html'; return; }
+            const user = userJson ? JSON.parse(userJson) : { id: 'anonymous' };
 
             // UI State Change
             btn.disabled = true;
@@ -248,72 +244,112 @@
             input.disabled = true;
             attachBtn.disabled = true;
 
-            // Simulate Progress Bar for UX
+            // Simulate Progress Bar for UX (since we don't have real-time progress from backend yet)
             let width = 0;
             const interval = setInterval(() => {
-                width += 5;
-                if (width > 90) width = 90; // Hold at 90 until fetch done
+                width += 1; // Slower progress
+                if (width > 90) width = 90; 
                 progressBar.style.width = width + '%';
                 percentText.innerText = Math.round(width) + '%';
-            }, 100);
+            }, 300);
 
             try {
-                // Call Backend
-                const response = await fetch('/api/analysis', {
+                // Call Python Backend directly
+                const response = await fetch('http://localhost:8000/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        userId: user.id,
-                        url: hasUrl ? input.value : (selectedFiles.length > 0 ? selectedFiles[0].name : "Unknown")
+                        youtube_url: hasUrl ? input.value : "",
+                        user_id: user.id
                     })
                 });
 
-                const result = await response.json();
-
+                const data = await response.json();
                 clearInterval(interval);
-                progressBar.style.width = '100%';
-                percentText.innerText = '100%';
 
-                setTimeout(() => {
-                    progressSection.style.display = 'none';
-                    resultsSection.style.display = 'block';
+                if (response.ok && data.success) {
+                    progressBar.style.width = '100%';
+                    percentText.innerText = '100%';
 
-                    if (result.success && result.data) {
-                        const data = result.data;
-                        document.getElementById('videoTitleElement').innerText = data.title;
-                        document.getElementById('channelNameElement').innerText = data.channelName + " • " + data.views + " • " + data.uploadDate;
-                        document.getElementById('videoSummaryElement').innerHTML = data.summary;
+                    setTimeout(() => {
+                        progressSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+
+                        // --- Populate Data ---
+                        
+                        // Metadata (Simulated since backend doesn't return title/channel yet, or we'd need another API call)
+                        document.getElementById('videoTitleElement').innerText = "Analysis Result"; 
+                        document.getElementById('channelNameElement').innerText = "YouTube Video • " + new Date().toLocaleDateString();
+                        
+                        // Summary
+                        document.getElementById('videoSummaryElement').innerText = data.summary;
 
                         // Scores
-                        document.querySelector('.card h4 + div span:first-child').innerText = data.craftScore;
-                        document.querySelector('.card h4 + div span:last-child').innerText = data.comparison;
+                        document.getElementById('craftScoreValue').innerText = data.craft_score;
+                        
+                        // Calculate Diff (Simulated)
+                        const diff = (data.craft_score - 5).toFixed(1);
+                        const diffSign = diff >= 0 ? "+" : "";
+                        document.getElementById('craftScoreDiff').innerText = `${diffSign}${diff} vs avg`;
+                        document.getElementById('craftScoreDiff').style.color = diff >= 0 ? '#137333' : '#d93025';
+                        document.getElementById('craftScoreDiff').style.background = diff >= 0 ? '#e6f4ea' : '#fce8e6';
 
-                        // Metrics
-                        const metrics = document.querySelectorAll('.stat-card div:first-child');
-                        if (metrics[0]) metrics[0].innerText = data.pacingScore;
-                        if (metrics[1]) metrics[1].innerText = data.clarityScore;
-                        if (metrics[2]) metrics[2].innerText = data.retention;
-                        if (metrics[3]) metrics[3].innerText = data.toneMatch;
-                    }
+                        // Analysis Comment
+                        const comment = data.craft_score >= 8 ? "Excellent! Top tier content." : 
+                                      data.craft_score >= 6 ? "Good job, but room for improvement." : "Needs optimization.";
+                        document.getElementById('analysisComment').innerText = comment;
 
-                    // Reset Buttons
-                    btn.disabled = false;
-                    btn.innerText = 'Analyze';
-                    btn.classList.remove('analyzing-state');
-                    input.disabled = false;
-                    attachBtn.disabled = false;
-                }, 500);
+                        // Sub-metrics
+                        document.getElementById('hookScoreValue').innerText = data.hook_score; // Hook
+                        document.getElementById('seoScoreValue').innerText = data.seo_score;   // SEO
+                        document.getElementById('retentionScoreValue').innerText = data.retention_score; // Retention
+                        
+                        // Grade Calculation
+                        let grade = 'C';
+                        if (data.craft_score >= 9) grade = 'A+';
+                        else if (data.craft_score >= 8) grade = 'A';
+                        else if (data.craft_score >= 7) grade = 'B';
+                        else if (data.craft_score >= 5) grade = 'C';
+                        else grade = 'D';
+                        document.getElementById('toneMatchValue').innerText = grade;
+
+                        // --- SAVE REPORT LOCAL STORAGE ---
+                        const newReport = {
+                            id: Date.now(),
+                            title: "Analysis Result " + new Date().toLocaleTimeString(),
+                            videoUrl: hasUrl ? input.value : "File Upload",
+                            createdAt: new Date().toISOString(),
+                            craftScore: data.craft_score,
+                            summary: data.summary
+                        };
+                        
+                        // Get existing
+                        let reports = JSON.parse(localStorage.getItem('savedReports') || '[]');
+                        // Add new to top
+                        reports.unshift(newReport);
+                        // Save back
+                        localStorage.setItem('savedReports', JSON.stringify(reports));
+
+                        // Reset UI
+                        input.value = '';
+                        selectedFiles = [];
+                        renderFileList();
+                    }, 500);
+                } else {
+                    throw new Error(data.detail || data.error || "Analysis failed");
+                }
 
             } catch (e) {
                 console.error(e);
                 clearInterval(interval);
-                alert("Analysis failed. Please try again.");
+                alert("Analysis failed: " + e.message);
+                progressSection.style.display = 'none';
+            } finally {
                 btn.disabled = false;
                 btn.innerText = 'Analyze';
                 btn.classList.remove('analyzing-state');
                 input.disabled = false;
                 attachBtn.disabled = false;
-                progressSection.style.display = 'none';
             }
         }
 

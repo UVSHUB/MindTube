@@ -40,9 +40,9 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-section-title">Workspace</div>
-            <a href="dashboard.html" class="sidebar-link active">Analysis Console</a>
-            <a href="saved-reports.html" class="sidebar-link">Saved Reports</a>
-            <a href="trends.html" class="sidebar-link">Trends</a>
+            <a href="dashboard.html" class="sidebar-link active">Video Analysis</a>
+            <a href="saved-reports.html" class="sidebar-link">Saved Summaries</a>
+            <a href="trends.html" class="sidebar-link">Learning Trends</a>
 
             <div class="sidebar-section-title">Account</div>
             <a href="settings.html" class="sidebar-link">Settings</a>
@@ -56,8 +56,8 @@
             <!-- Input Card -->
             <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 3rem;">
                 <div style="text-align: center; margin-bottom: 2.5rem;">
-                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">New Analysis</h2>
-                    <p>Paste a YouTube URL to generate semantic insights and retention predictions.</p>
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">Analyze Learning Video</h2>
+                    <p>Paste a YouTube URL to get a clear summary and grasp the core concepts of any educational video.</p>
                 </div>
 
                 <div class="input-wrapper" style="padding-left: 0.75rem;">
@@ -87,68 +87,95 @@
 
             <!-- Results Section -->
             <div id="resultsSection" style="display: none;">
-                <!-- Summary Card -->
+                <!-- Video Info Card -->
                 <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
-                    <div style="display: flex; gap: 1.5rem; align-items: start;">
-                        <!-- Thumbnail Placeholder -->
+                    <div style="display: flex; gap: 1.5rem; align-items: start; margin-bottom: 2rem;">
+                        <!-- Subject Icon -->
                         <div
-                            style="width: 160px; height: 90px; background: #f1f3f4; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 2rem;">▶️</span>
+                            style="width: 160px; height: 90px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.5rem;">
+                            <span style="font-size: 2.5rem;">🎓</span>
+                            <span id="difficultyBadge" style="background: rgba(255,255,255,0.3); padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; color: white; font-weight: 600;">Loading...</span>
                         </div>
                         <div style="flex: 1;">
                             <h3 id="videoTitleElement"
-                                style="font-size: 1.25rem; margin-bottom: 0.5rem; line-height: 1.3;">
+                                style="font-size: 1.5rem; margin-bottom: 0.5rem; line-height: 1.3; color: var(--labs-black);">
                                 Analyzing Video...</h3>
-                            <div
-                                style="display: flex; gap: 1rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--labs-grey);">
-                                <span id="channelNameElement">Channel Name</span>
-                                <span>•</span>
-                                <span>1.2M Views</span>
-                                <span>•</span>
-                                <span>2 days ago</span>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--labs-grey);">
+                                <span id="subjectAreaElement">📚 Preparing content...</span>
                             </div>
-                            <p id="videoSummaryElement"
-                                style="font-size: 0.95rem; margin-bottom: 0; color: var(--labs-black);">
+                            <p id="videoSummaryElement" style="font-size: 0.95rem; line-height: 1.6; color: var(--labs-black); margin: 0;">
                                 Summary will appear here after analysis.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-2">
-                    <!-- Score Card -->
-                    <div class="card" style="background: #fff; border: 1px solid var(--labs-border);">
-                        <h4
-                            style="color: var(--labs-grey); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
-                            Craft Score</h4>
-                        <div style="display: flex; align-items: baseline; gap: 1rem; margin-top: 1rem;">
-                            <span id="craftScoreValue"
-                                style="font-size: 4rem; font-family: var(--font-head); font-weight: 700; line-height: 1;">-</span>
-                            <span id="craftScoreDiff"
-                                style="color: #137333; font-weight: 500; background: #e6f4ea; padding: 4px 8px; border-radius: 6px;">--</span>
-                        </div>
-                        <p id="analysisComment" style="margin-top: 1rem; font-size: 1.1rem;">Analysis ready.</p>
+                <!-- Prerequisites Card -->
+                <div class="card mb-4" style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span style="font-size: 1.3rem;">⚠️</span>
+                        <h4 style="font-size: 1rem; font-weight: 600; margin: 0; color: #856404;">Prerequisites</h4>
                     </div>
+                    <ul id="prerequisitesElement" style="margin: 0; padding-left: 1.5rem; color: #856404; line-height: 1.8;">
+                        <li>Loading prerequisites...</li>
+                    </ul>
+                </div>
 
-                    <!-- Metrics Grid -->
-                    <div class="grid grid-2" style="gap: 1rem;">
-                        <div class="stat-card">
-                            <div id="hookScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Hook Score</div>
-                        </div>
-                        <div class="stat-card">
-                            <div id="seoScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">SEO Score</div>
-                        </div>
-                        <div class="stat-card">
-                            <div id="retentionScoreValue" style="font-size: 2rem; font-weight: 700;">-</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Retention Score</div>
-                        </div>
-                        <div class="stat-card">
-                            <div id="toneMatchValue" style="font-size: 2rem; font-weight: 700;">-</div>
-                            <div style="font-size: 0.9rem; color: var(--labs-grey);">Overall Grade</div>
+                <!-- Learning Objectives Card -->
+                <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem;">🎯</span>
+                        <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Learning Objectives</h4>
+                    </div>
+                    <div id="learningObjectivesElement" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <p style="margin: 0; color: var(--labs-grey);">Loading objectives...</p>
+                    </div>
+                </div>
+
+                <!-- Detailed Explanation Card -->
+                <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem;">📖</span>
+                        <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Detailed Explanation</h4>
+                    </div>
+                    <div id="detailedExplanationElement" style="font-size: 1.05rem; line-height: 1.8; color: var(--labs-black);">
+                        <p>Processing video content...</p>
+                    </div>
+                </div>
+
+                <!-- Key Concepts Card -->
+                <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem;">💡</span>
+                        <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Key Concepts</h4>
+                    </div>
+                    <div id="keyConceptsElement" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <p style="margin: 0;">Loading concepts...</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Examples Covered Card -->
+                <div class="card mb-4" style="background: #fff; border: 1px solid var(--labs-border); padding: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem;">📝</span>
+                        <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Examples & Demonstrations</h4>
+                    </div>
+                    <div id="examplesElement" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <p style="margin: 0; color: var(--labs-grey);">Loading examples...</p>
+                    </div>
+                </div>
+
+                <!-- Key Takeaways Card -->
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 2rem; color: white;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem;">⭐</span>
+                        <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Key Takeaways</h4>
+                    </div>
+                    <ul id="keyTakeawaysElement" style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                        <li>Loading key takeaways...</li>
+                    </ul>
                 </div>
             </div>
 
@@ -275,52 +302,97 @@
                         progressSection.style.display = 'none';
                         resultsSection.style.display = 'block';
 
-                        // --- Populate Data ---
+                        // --- Populate Educational Content ---
                         
-                        // Metadata (Simulated since backend doesn't return title/channel yet, or we'd need another API call)
-                        document.getElementById('videoTitleElement').innerText = "Analysis Result"; 
-                        document.getElementById('channelNameElement').innerText = "YouTube Video • " + new Date().toLocaleDateString();
+                        // Video Title & Subject
+                        document.getElementById('videoTitleElement').innerText = data.title || "Educational Video Content"; 
+                        document.getElementById('subjectAreaElement').innerText = "📚 " + (data.subject_area || "General Education");
+                        
+                        // Difficulty Badge
+                        const diffBadge = document.getElementById('difficultyBadge');
+                        diffBadge.innerText = data.difficulty_level || "Intermediate";
                         
                         // Summary
-                        document.getElementById('videoSummaryElement').innerText = data.summary;
+                        document.getElementById('videoSummaryElement').innerText = data.summary || "This video covers important educational content.";
 
-                        // Scores
-                        document.getElementById('craftScoreValue').innerText = data.craft_score;
-                        
-                        // Calculate Diff (Simulated)
-                        const diff = (data.craft_score - 5).toFixed(1);
-                        const diffSign = diff >= 0 ? "+" : "";
-                        document.getElementById('craftScoreDiff').innerText = `${diffSign}${diff} vs avg`;
-                        document.getElementById('craftScoreDiff').style.color = diff >= 0 ? '#137333' : '#d93025';
-                        document.getElementById('craftScoreDiff').style.background = diff >= 0 ? '#e6f4ea' : '#fce8e6';
+                        // Prerequisites
+                        const prereqElement = document.getElementById('prerequisitesElement');
+                        if (data.prerequisites && data.prerequisites.length > 0) {
+                            prereqElement.innerHTML = data.prerequisites.map(prereq => 
+                                `<li>${prereq}</li>`
+                            ).join('');
+                        } else {
+                            prereqElement.innerHTML = '<li>No specific prerequisites required</li>';
+                        }
 
-                        // Analysis Comment
-                        const comment = data.craft_score >= 8 ? "Excellent! Top tier content." : 
-                                      data.craft_score >= 6 ? "Good job, but room for improvement." : "Needs optimization.";
-                        document.getElementById('analysisComment').innerText = comment;
+                        // Learning Objectives
+                        const objectivesElement = document.getElementById('learningObjectivesElement');
+                        if (data.learning_objectives && data.learning_objectives.length > 0) {
+                            objectivesElement.innerHTML = data.learning_objectives.map((obj, idx) => `
+                                <div style="display: flex; gap: 0.75rem; align-items: start;">
+                                    <span style="background: #667eea; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; flex-shrink: 0;">${idx + 1}</span>
+                                    <p style="margin: 0; line-height: 1.6; color: var(--labs-black);">${obj}</p>
+                                </div>
+                            `).join('');
+                        } else {
+                            objectivesElement.innerHTML = '<p style="margin: 0; color: var(--labs-grey);">Learning objectives not specified</p>';
+                        }
 
-                        // Sub-metrics
-                        document.getElementById('hookScoreValue').innerText = data.hook_score; // Hook
-                        document.getElementById('seoScoreValue').innerText = data.seo_score;   // SEO
-                        document.getElementById('retentionScoreValue').innerText = data.retention_score; // Retention
-                        
-                        // Grade Calculation
-                        let grade = 'C';
-                        if (data.craft_score >= 9) grade = 'A+';
-                        else if (data.craft_score >= 8) grade = 'A';
-                        else if (data.craft_score >= 7) grade = 'B';
-                        else if (data.craft_score >= 5) grade = 'C';
-                        else grade = 'D';
-                        document.getElementById('toneMatchValue').innerText = grade;
+                        // Detailed Explanation
+                        const explanationElement = document.getElementById('detailedExplanationElement');
+                        if (data.detailed_explanation) {
+                            // Split into paragraphs for better readability
+                            const paragraphs = data.detailed_explanation.split('\n\n').filter(p => p.trim());
+                            explanationElement.innerHTML = paragraphs.map(para => 
+                                `<p style="margin-bottom: 1.5rem;">${para.trim()}</p>`
+                            ).join('');
+                        } else {
+                            explanationElement.innerHTML = '<p>No detailed explanation available</p>';
+                        }
+
+                        // Key Concepts
+                        const conceptsElement = document.getElementById('keyConceptsElement');
+                        if (data.key_concepts && data.key_concepts.length > 0) {
+                            conceptsElement.innerHTML = data.key_concepts.map(concept => `
+                                <div style="padding: 1rem 1.25rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 3px solid #667eea;">
+                                    <p style="margin: 0; font-weight: 500; color: var(--labs-black);">${concept}</p>
+                                </div>
+                            `).join('');
+                        } else {
+                            conceptsElement.innerHTML = '<div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;"><p style="margin: 0;">No key concepts extracted</p></div>';
+                        }
+
+                        // Examples
+                        const examplesElement = document.getElementById('examplesElement');
+                        if (data.examples_covered && data.examples_covered.length > 0) {
+                            examplesElement.innerHTML = data.examples_covered.map((example, idx) => `
+                                <div style="padding: 1rem; background: #f8f9fa; border-left: 3px solid #764ba2; border-radius: 6px;">
+                                    <p style="margin: 0; line-height: 1.6; color: var(--labs-black);"><strong>Example ${idx + 1}:</strong> ${example}</p>
+                                </div>
+                            `).join('');
+                        } else {
+                            examplesElement.innerHTML = '<p style="margin: 0; color: var(--labs-grey);">No specific examples identified</p>';
+                        }
+
+                        // Key Takeaways
+                        const takeawaysElement = document.getElementById('keyTakeawaysElement');
+                        if (data.key_takeaways && data.key_takeaways.length > 0) {
+                            takeawaysElement.innerHTML = data.key_takeaways.map(takeaway => 
+                                `<li style="margin-bottom: 0.5rem;">${takeaway}</li>`
+                            ).join('');
+                        } else {
+                            takeawaysElement.innerHTML = '<li>Review the detailed explanation above</li>';
+                        }
 
                         // --- SAVE REPORT LOCAL STORAGE ---
                         const newReport = {
                             id: Date.now(),
-                            title: "Analysis Result " + new Date().toLocaleTimeString(),
+                            title: data.title || "Video Analysis " + new Date().toLocaleTimeString(),
                             videoUrl: hasUrl ? input.value : "File Upload",
                             createdAt: new Date().toISOString(),
-                            craftScore: data.craft_score,
-                            summary: data.summary
+                            summary: data.summary,
+                            subject_area: data.subject_area,
+                            difficulty_level: data.difficulty_level
                         };
                         
                         // Get existing

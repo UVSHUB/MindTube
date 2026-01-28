@@ -45,16 +45,17 @@ class AnalysisRequest(BaseModel):
     user_id: Optional[str] = Field(None, description="User ID for tracking (UUID)")
 
 class AnalysisResponse(BaseModel):
-    """Structured response model matching Gemini output"""
-    hook_score: float = Field(..., ge=0, le=10, description="Hook effectiveness score (0-10)")
-    retention_score: float = Field(..., ge=0, le=10, description="Retention potential score (0-10)")
-    seo_score: float = Field(..., ge=0, le=10, description="SEO optimization score (0-10)")
-    craft_score: float = Field(..., ge=0, le=10, description="Overall craft score (0-10)")
-    strengths: list[str] = Field(..., description="Key strengths of the video")
-    improvements: list[str] = Field(..., description="Suggested improvements")
-    seo_keywords: list[str] = Field(..., description="Recommended SEO keywords")
-    title_suggestions: list[str] = Field(..., description="Alternative title suggestions")
-    summary: str = Field(..., description="Brief video summary")
+    """Structured response model for educational content extraction"""
+    title: str = Field(..., description="Video title or topic")
+    subject_area: str = Field(..., description="Subject area (e.g., Mathematics, Physics, Computer Science)")
+    difficulty_level: str = Field(..., description="Difficulty level: Beginner, Intermediate, or Advanced")
+    key_concepts: list[str] = Field(..., description="Main concepts covered in the video")
+    detailed_explanation: str = Field(..., description="Comprehensive explanation of what is taught in the video")
+    learning_objectives: list[str] = Field(..., description="What students will learn after watching")
+    examples_covered: list[str] = Field(..., description="Examples or case studies covered")
+    prerequisites: list[str] = Field(..., description="What students should know before watching")
+    key_takeaways: list[str] = Field(..., description="Important points to remember")
+    summary: str = Field(..., description="Brief overview of the video content")
     success: bool = Field(True, description="Analysis success status")
     error: Optional[str] = Field(None, description="Error message if any")
 
@@ -259,59 +260,63 @@ class NLPPreprocessor:
         return text
 
 
-class GeminiAnalyzer:
-    """Handles content analysis using Google Gemini AI"""
+class GroqAnalyzer:
+    """Handles content analysis using Groq AI (Free & Fast)"""
     
     def __init__(self):
-        """Initialize Gemini client"""
-        self.api_key = os.getenv("GEMINI_API_KEY")
+        """Initialize Groq client"""
+        self.api_key = os.getenv("GROQ_API_KEY")
         if not self.api_key:
-            logger.error("GEMINI_API_KEY environment variable not set")
+            logger.error("GROQ_API_KEY environment variable not set")
         self.client = None
     
     def _initialize_client(self):
-        """Initialize Gemini client on first use"""
+        """Initialize Groq client on first use"""
         if self.client is None:
             try:
-                from google import genai
-                client = genai.Client(api_key=self.api_key)
-                self.client = client
-                logger.info("Gemini client initialized successfully")
+                from groq import Groq
+                self.client = Groq(api_key=self.api_key)
+                logger.info("Groq client initialized successfully")
             except Exception as e:
-                logger.error(f"Failed to initialize Gemini: {str(e)}")
+                logger.error(f"Failed to initialize Groq: {str(e)}")
                 raise
     
     def _get_system_instruction(self) -> str:
-        """Define Gemini's persona and instructions"""
-        return """You are a Senior Content Strategist and YouTube Analytics Expert with 10+ years of experience. 
+        """Define AI's persona and instructions"""
+        return """You are an Expert Educational Content Analyst and Learning Facilitator with deep expertise in pedagogy and knowledge extraction.
         
-Your role is to analyze YouTube video transcripts and provide actionable insights to help creators improve their content.
+Your role is to analyze educational video transcripts and extract learning content in a way that helps university students understand and master the material.
 
-When analyzing videos, evaluate:
-1. HOOK SCORE (0-10): How effectively does the video capture attention in the first 30 seconds?
-2. RETENTION SCORE (0-10): How well does the content maintain viewer engagement throughout?
-3. SEO SCORE (0-10): How well-optimized is the content for search and discovery?
-4. CRAFT SCORE (0-10): Overall content quality, pacing, and production value
+When analyzing educational videos, extract:
+1. SUBJECT AREA: The academic field or discipline
+2. DIFFICULTY LEVEL: Beginner, Intermediate, or Advanced
+3. KEY CONCEPTS: Main ideas and principles taught
+4. DETAILED EXPLANATION: Clear, comprehensive explanation of the content that enables learning
+5. LEARNING OBJECTIVES: What students will be able to do after watching
+6. EXAMPLES: Specific examples, case studies, or demonstrations covered
+7. PREREQUISITES: Background knowledge needed to understand the material
+8. KEY TAKEAWAYS: Most important points to remember
 
 Provide your analysis in the following JSON structure:
 {
-    "hook_score": <float 0-10>,
-    "retention_score": <float 0-10>,
-    "seo_score": <float 0-10>,
-    "craft_score": <float 0-10>,
-    "strengths": [<list of 3-5 key strengths>],
-    "improvements": [<list of 3-5 actionable improvements>],
-    "seo_keywords": [<list of 5-10 relevant keywords>],
-    "title_suggestions": [<list of 3 alternative title ideas>],
-    "summary": "<2-3 sentence summary of the video content>"
+    "title": "<video title or main topic>",
+    "subject_area": "<academic subject>",
+    "difficulty_level": "<Beginner|Intermediate|Advanced>",
+    "key_concepts": [<list of 4-8 main concepts>],
+    "detailed_explanation": "<comprehensive explanation of what is taught, written in a clear educational style that helps students learn>",
+    "learning_objectives": [<list of 3-5 learning outcomes>],
+    "examples_covered": [<list of 3-5 examples or demonstrations>],
+    "prerequisites": [<list of 2-4 prerequisite topics>],
+    "key_takeaways": [<list of 3-5 important points>],
+    "summary": "<2-3 sentence overview of the video content>"
 }
 
-Be specific, actionable, and encouraging in your feedback. Focus on practical improvements that creators can implement immediately.
+Write the detailed_explanation in a way that teaches the material effectively. Use clear language, define terms, and explain concepts thoroughly so a student can learn without watching the video.
 """
     
     def analyze_content(self, cleaned_transcript: str) -> Dict[str, Any]:
         """
-        Analyze video content using Gemini AI
+        Analyze video content using Groq AI
         
         Args:
             cleaned_transcript: Preprocessed transcript text
@@ -323,72 +328,67 @@ Be specific, actionable, and encouraging in your feedback. Focus on practical im
             self._initialize_client()
             
             if not self.api_key:
-                raise Exception("Gemini API key not configured")
+                raise Exception("Groq API key not configured")
             
-            logger.info("Sending transcript to Gemini for analysis")
+            logger.info("Sending transcript to Groq for educational content extraction")
             
             # Construct the prompt
-            prompt = f"""Analyze the following YouTube video transcript and provide a comprehensive content strategy analysis.
+            prompt = f"""Extract educational content from the following video transcript and present it in a way that helps university students learn and understand the material.
 
 Transcript:
 {cleaned_transcript[:15000]}
 
+Analyze this educational content thoroughly and provide a comprehensive learning guide. Focus on explaining what is taught, the key concepts, examples, and learning outcomes. Write the detailed explanation as if you're teaching the material to a student.
+
 Remember to return your analysis in valid JSON format only, with no additional text."""
             
-            # Generate content with Gemini using new API
-            model_name = 'gemini-2.5-flash'
-            logger.info(f"Using Gemini model: {model_name}")
-            response = self.client.models.generate_content(
+            # Generate content with Groq
+            # Available models: llama-3.3-70b-versatile, llama-3.1-8b-instant, mixtral-8x7b-32768
+            model_name = 'llama-3.3-70b-versatile'  # Fast and powerful
+            logger.info(f"Using Groq model: {model_name}")
+            
+            response = self.client.chat.completions.create(
                 model=model_name,
-                contents=prompt,
-                config={
-                    'system_instruction': self._get_system_instruction(),
-                    'temperature': 0.7,
-                }
+                messages=[
+                    {"role": "system", "content": self._get_system_instruction()},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7,
+                max_tokens=4096,
+                response_format={"type": "json_object"}  # Force JSON output
             )
             
-            # Extract and parse JSON from response
-            response_text = response.text
-            
-            # Try to extract JSON from response (handle markdown code blocks)
-            json_match = re.search(r'```json\s*(.*?)\s*```', response_text, re.DOTALL)
-            if json_match:
-                response_text = json_match.group(1)
-            else:
-                # Try to find JSON object in response
-                json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
-                if json_match:
-                    response_text = json_match.group(0)
+            # Extract response text
+            response_text = response.choices[0].message.content
             
             # Parse JSON response
             analysis_result = json.loads(response_text)
             
-            # Calculate craft score if not provided (average of other scores)
-            if 'craft_score' not in analysis_result:
-                analysis_result['craft_score'] = round(
-                    (analysis_result['hook_score'] + 
-                     analysis_result['retention_score'] + 
-                     analysis_result['seo_score']) / 3,
-                    2
-                )
+            # Ensure all required fields are present
+            if 'title' not in analysis_result:
+                analysis_result['title'] = "Educational Video Content"
+            if 'subject_area' not in analysis_result:
+                analysis_result['subject_area'] = "General"
+            if 'difficulty_level' not in analysis_result:
+                analysis_result['difficulty_level'] = "Intermediate"
             
-            logger.info(f"Analysis completed. Craft Score: {analysis_result.get('craft_score')}")
+            logger.info(f"Educational content extracted: {analysis_result.get('title')}")
             
             return analysis_result
             
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse Gemini response as JSON: {str(e)}")
+            logger.error(f"Failed to parse Groq response as JSON: {str(e)}")
             logger.error(f"Raw response: {response_text[:500]}")
-            raise Exception(f"Invalid JSON response from Gemini: {str(e)}")
+            raise Exception(f"Invalid JSON response from Groq: {str(e)}")
         except Exception as e:
-            logger.error(f"Gemini analysis error: {str(e)}")
+            logger.error(f"Groq analysis error: {str(e)}")
             raise Exception(f"Content analysis failed: {str(e)}")
 
 
 # Initialize service components
 transcript_extractor = TranscriptExtractor()
 nlp_preprocessor = NLPPreprocessor()
-gemini_analyzer = GeminiAnalyzer()
+groq_analyzer = GroqAnalyzer()
 
 
 @app.get("/")
@@ -406,8 +406,8 @@ async def health_check():
     """Detailed health check"""
     return {
         "status": "healthy",
-        "gemini_configured": bool(os.getenv("GEMINI_API_KEY")),
-        "timestamp": "2026-01-20"
+        "groq_configured": bool(os.getenv("GROQ_API_KEY")),
+        "timestamp": "2026-01-28"
     }
 
 
@@ -419,7 +419,7 @@ async def analyze_video(request: AnalysisRequest):
     This endpoint orchestrates the complete analysis pipeline:
     1. Extract transcript using yt-dlp
     2. Clean and preprocess text using spaCy
-    3. Analyze content using Gemini AI
+    3. Analyze content using Groq AI
     4. Return structured results
     
     Args:
@@ -443,8 +443,8 @@ async def analyze_video(request: AnalysisRequest):
         # Step 2: Clean and preprocess
         cleaned_transcript = nlp_preprocessor.clean_transcript(raw_transcript)
         
-        # Step 3: Analyze with Gemini
-        analysis_result = gemini_analyzer.analyze_content(cleaned_transcript)
+        # Step 3: Analyze with Groq
+        analysis_result = groq_analyzer.analyze_content(cleaned_transcript)
         
         # Step 4: Return structured response
         response = AnalysisResponse(

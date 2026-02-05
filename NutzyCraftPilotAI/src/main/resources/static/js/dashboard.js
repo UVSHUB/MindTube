@@ -84,7 +84,7 @@ async function startAnalysis() {
   }, 300);
 
   try {
-    const response = await fetch("http://localhost:8000/analyze", {
+    const response = await fetch("http://209.97.161.131/ai/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -64,33 +64,31 @@ class TranscriptExtractor:
     """Handles YouTube transcript extraction using yt-dlp"""
     
     @staticmethod
-    def extract_transcript(youtube_url: str) -> str:
+    def extract_transcript(youtube_url: str) -> tuple[str, int]:
         """
-        Extract transcript from YouTube video without downloading the video
+        Extract transcript and duration from YouTube video
         
         Args:
             youtube_url: The YouTube video URL
             
         Returns:
-            Raw transcript text
-            
-        Raises:
-            Exception: If transcript extraction fails
+            Tuple of (transcript text, duration in seconds)
         """
         try:
-            logger.info(f"Extracting transcript from: {youtube_url}")
+            logger.info(f"Extracting transcript and metadata from: {youtube_url}")
             
-            # Try auto-generated captions first
             import sys
+            # Command to get duration and try to get subs
             command = [
                 sys.executable, "-m", "yt_dlp",
                 "--skip-download",
                 "--write-auto-subs",
-                "--write-subs",  # Also try manual subs
+                "--write-subs",
                 "--sub-lang", "en",
                 "--sub-format", "json3",
                 "--output", "temp_transcript",
-                "--quiet",  # Suppress warnings
+                "--print", "duration",
+                "--quiet",
                 "--no-warnings",
                 youtube_url
             ]
@@ -102,7 +100,15 @@ class TranscriptExtractor:
                 timeout=60
             )
             
-            # Check for subtitle files (try multiple patterns)
+            # Get duration from stdout
+            try:
+                duration_str = result.stdout.strip().split('\n')[-1] # Take last line in case of multiple
+                duration = int(duration_str)
+            except:
+                logger.warning("Could not extract duration, defaulting to 0")
+                duration = 0
+
+            # Check for subtitle files
             subtitle_patterns = [
                 "temp_transcript.en.json3",
                 "temp_transcript.json3",
@@ -118,16 +124,13 @@ class TranscriptExtractor:
                     break
             
             if not subtitle_file:
-                # Clean up any partial files
                 for p in Path(".").glob("temp_transcript*"):
                     p.unlink(missing_ok=True)
-                raise Exception("No captions/subtitles available for this video. Please try a video with closed captions enabled.")
+                raise Exception("No captions/subtitles available for this video.")
             
-            # Parse the JSON subtitle file
             with open(subtitle_file, 'r', encoding='utf-8') as f:
                 subtitle_data = json.load(f)
             
-            # Extract text from subtitle events
             transcript_parts = []
             if 'events' in subtitle_data:
                 for event in subtitle_data['events']:
@@ -136,7 +139,6 @@ class TranscriptExtractor:
                             if 'utf8' in seg:
                                 transcript_parts.append(seg['utf8'])
             
-            # Clean up all temp files
             for p in Path(".").glob("temp_transcript*"):
                 p.unlink(missing_ok=True)
             
@@ -144,9 +146,9 @@ class TranscriptExtractor:
                 raise Exception("Extracted subtitle file is empty")
             
             transcript = ' '.join(transcript_parts)
-            logger.info(f"Extracted transcript: {len(transcript)} characters")
+            logger.info(f"Extracted transcript: {len(transcript)} chars, Duration: {duration}s")
             
-            return transcript
+            return transcript, duration
             
         except subprocess.TimeoutExpired:
             logger.error("Transcript extraction timed out")
@@ -302,24 +304,25 @@ Provide your analysis in the following JSON structure:
     "title": "<video title or main topic>",
     "subject_area": "<academic subject>",
     "difficulty_level": "<Beginner|Intermediate|Advanced>",
-    "key_concepts": [<list of 4-8 main concepts>],
-    "detailed_explanation": "<comprehensive explanation of what is taught, written in a clear educational style that helps students learn>",
-    "learning_objectives": [<list of 3-5 learning outcomes>],
-    "examples_covered": [<list of 3-5 examples or demonstrations>],
-    "prerequisites": [<list of 2-4 prerequisite topics>],
-    "key_takeaways": [<list of 3-5 important points>],
-    "summary": "<2-3 sentence overview of the video content>"
+    "key_concepts": [<comprehensive list of all main concepts mentioned>],
+    "detailed_explanation": "<extremely detailed, multi-paragraph explanation of EVERYTHING taught; if the video is long, this section should be very extensive, covering every nuance in a clear educational style>",
+    "learning_objectives": [<full list of learning outcomes based on the video's depth>],
+    "examples_covered": [<all examples, case studies, or demonstrations mentioned>],
+    "prerequisites": [<all necessary background knowledge needed>],
+    "key_takeaways": [<comprehensive list of all important points to remember>],
+    "summary": "<overview of the video content and its value>"
 }
 
-Write the detailed_explanation in a way that teaches the material effectively. Use clear language, define terms, and explain concepts thoroughly so a student can learn without watching the video.
+Write the detailed_explanation in a way that teaches the material effectively. Use clear language, define terms, and explain concepts thoroughly. The length and depth of the explanation MUST be proportional to the length and complexity of the video content. For longer, more technical videos, provide an exhaustive breakdown so a student can learn the material in depth without needing to watch the video.
 """
     
-    def analyze_content(self, cleaned_transcript: str) -> Dict[str, Any]:
+    def analyze_content(self, cleaned_transcript: str, duration_seconds: int = 0) -> Dict[str, Any]:
         """
         Analyze video content using Groq AI
         
         Args:
             cleaned_transcript: Preprocessed transcript text
+            duration_seconds: Length of the video in seconds
             
         Returns:
             Structured analysis results as dictionary
@@ -332,13 +335,22 @@ Write the detailed_explanation in a way that teaches the material effectively. U
             
             logger.info("Sending transcript to Groq for educational content extraction")
             
+            duration_minutes = duration_seconds // 60
+            
             # Construct the prompt
-            prompt = f"""Extract educational content from the following video transcript and present it in a way that helps university students learn and understand the material.
+            prompt = f"""Extract educational content from the following video transcript.
+            
+VIDEO DURATION: {duration_minutes} minutes
 
 Transcript:
-{cleaned_transcript[:15000]}
+{cleaned_transcript[:30000]}
 
-Analyze this educational content thoroughly and provide a comprehensive learning guide. Focus on explaining what is taught, the key concepts, examples, and learning outcomes. Write the detailed explanation as if you're teaching the material to a student.
+Analyze this educational content thoroughly and provide a comprehensive, deep-dive learning guide. 
+IMPORTANT: The 'detailed_explanation' must be proportional to the video duration ({duration_minutes} minutes). 
+- If the video is short (e.g., < 5 mins), a concise but thorough explanation is fine.
+- If the video is long (e.g., > 15 mins), you MUST provide a very lengthy, multi-section, and exhaustive 'detailed_explanation' that covers every major point and nuance mentioned in the transcript.
+
+Focus on explaining what is taught, the key concepts, examples, and learning outcomes in great detail. 
 
 Remember to return your analysis in valid JSON format only, with no additional text."""
             
@@ -431,8 +443,8 @@ async def analyze_video(request: AnalysisRequest):
     try:
         logger.info(f"Starting analysis for: {request.youtube_url}")
         
-        # Step 1: Extract transcript
-        raw_transcript = transcript_extractor.extract_transcript(str(request.youtube_url))
+        # Step 1: Extract transcript and duration
+        raw_transcript, duration = transcript_extractor.extract_transcript(str(request.youtube_url))
         
         if not raw_transcript or len(raw_transcript) < 100:
             raise HTTPException(
@@ -444,7 +456,7 @@ async def analyze_video(request: AnalysisRequest):
         cleaned_transcript = nlp_preprocessor.clean_transcript(raw_transcript)
         
         # Step 3: Analyze with Groq
-        analysis_result = groq_analyzer.analyze_content(cleaned_transcript)
+        analysis_result = groq_analyzer.analyze_content(cleaned_transcript, duration)
         
         # Step 4: Return structured response
         response = AnalysisResponse(

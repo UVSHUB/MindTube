@@ -87,28 +87,33 @@ class TranscriptExtractor:
                 "--sub-lang", "en",
                 "--sub-format", "json3",
                 "--output", "temp_transcript",
-                "--print", "duration",
+                "--write-info-json",  # Get all metadata including duration
                 "--quiet",
                 "--no-warnings",
                 youtube_url
             ]
             
-            result = subprocess.run(
+            subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
                 timeout=60
             )
             
-            # Get duration from stdout
-            try:
-                duration_str = result.stdout.strip().split('\n')[-1] # Take last line in case of multiple
-                duration = int(duration_str)
-            except:
-                logger.warning("Could not extract duration, defaulting to 0")
-                duration = 0
+            # 1. Get duration from info.json
+            duration = 0
+            info_file = Path("temp_transcript.info.json")
+            if info_file.exists():
+                try:
+                    with open(info_file, 'r', encoding='utf-8') as f:
+                        info_data = json.load(f)
+                        duration = int(info_data.get('duration', 0))
+                except Exception as e:
+                    logger.warning(f"Could not parse info.json: {e}")
+            else:
+                logger.warning("info.json not found, duration will be 0")
 
-            # Check for subtitle files
+            # 2. Check for subtitle files
             subtitle_patterns = [
                 "temp_transcript.en.json3",
                 "temp_transcript.json3",
@@ -124,10 +129,12 @@ class TranscriptExtractor:
                     break
             
             if not subtitle_file:
+                # Clean up any partial files before raising
                 for p in Path(".").glob("temp_transcript*"):
                     p.unlink(missing_ok=True)
                 raise Exception("No captions/subtitles available for this video.")
             
+            # 3. Parse the JSON subtitle file
             with open(subtitle_file, 'r', encoding='utf-8') as f:
                 subtitle_data = json.load(f)
             
@@ -139,6 +146,7 @@ class TranscriptExtractor:
                             if 'utf8' in seg:
                                 transcript_parts.append(seg['utf8'])
             
+            # 4. Clean up all temp files
             for p in Path(".").glob("temp_transcript*"):
                 p.unlink(missing_ok=True)
             
@@ -313,7 +321,48 @@ Provide your analysis in the following JSON structure:
     "summary": "<overview of the video content and its value>"
 }
 
-Write the detailed_explanation in a way that teaches the material effectively. Use clear language, define terms, and explain concepts thoroughly. The length and depth of the explanation MUST be proportional to the length and complexity of the video content. For longer, more technical videos, provide an exhaustive breakdown so a student can learn the material in depth without needing to watch the video.
+CRITICAL: You MUST include ALL fields in your JSON response. Every field listed above is REQUIRED, including summary, title, subject_area, difficulty_level, key_concepts, detailed_explanation, learning_objectives, examples_covered, prerequisites, and key_takeaways. Do not omit any field.
+
+Write the detailed_explanation in a way that teaches the material effectively. 
+
+CRITICAL FORMATTING RULES FOR PDF AND WEB READABILITY:
+1. Use PURE PLAIN TEXT only. Absolutely NO Markdown (#, **, etc.) and NO HTML tags.
+2. For each major section, follow this EXACT structure:
+   - Write the section heading in ALL CAPS
+   - Add ONE blank line after the heading
+   - Write the content paragraphs
+   - Add ONE blank line before the next section heading
+3. Within a section, separate paragraphs with a single blank line.
+4. For lists, format like this:
+   - Start a new line after intro text
+   - Type a dash and space, then the list item
+   - Each list item on its own line
+   - Add a blank line after the entire list
+5. Keep paragraphs focused and clear (4-6 sentences).
+6. Use simple, direct language that students can easily understand.
+7. Break complex topics into multiple short paragraphs rather than one long paragraph.
+
+EXAMPLE OF CORRECT FORMAT:
+
+INTRODUCTION TO THE TOPIC
+
+This is the first paragraph explaining the main concept. It should be clear and easy to understand. Each paragraph focuses on one key idea. This helps students learn step by step.
+
+This is the second paragraph providing more specific details. Notice there is one blank line between paragraphs. This makes the text easy to read on both web and PDF.
+
+Key points to remember:
+- First important point explained clearly
+- Second important point with context
+- Third important point with examples
+
+NEXT MAJOR TOPIC
+
+This section starts immediately after the heading with just one blank line. This prevents large gaps in the PDF while keeping the structure clear.
+
+The content flows naturally from one paragraph to the next. Each paragraph builds on the previous one to create a complete learning experience.
+
+
+The length and depth of the explanation MUST be proportional to the length and complexity of the video content. For longer, more technical videos, provide an exhaustive breakdown so a student can learn the material in depth without needing to watch the video.
 """
     
     def analyze_content(self, cleaned_transcript: str, duration_seconds: int = 0) -> Dict[str, Any]:
@@ -351,6 +400,19 @@ IMPORTANT: The 'detailed_explanation' must be proportional to the video duration
 - If the video is long (e.g., > 15 mins), you MUST provide a very lengthy, multi-section, and exhaustive 'detailed_explanation' that covers every major point and nuance mentioned in the transcript.
 
 Focus on explaining what is taught, the key concepts, examples, and learning outcomes in great detail. 
+
+CRITICAL FORMATTING FOR PDF COMPATIBILITY: 
+- Use PURE PLAIN TEXT only
+- ALL CAPS headings on their own line
+- ONE blank line after each heading (not more)
+- ONE blank line between paragraphs
+- ONE blank line between sections
+- Use dash (-) for list items
+- Keep paragraphs clear and focused (4-6 sentences)
+- Break topics into multiple short paragraphs for better flow
+- NO Markdown symbols, NO HTML tags
+
+IMPORTANT: Include ALL required JSON fields in your response (title, subject_area, difficulty_level, key_concepts, detailed_explanation, learning_objectives, examples_covered, prerequisites, key_takeaways, and summary). Do not omit any field.
 
 Remember to return your analysis in valid JSON format only, with no additional text."""
             

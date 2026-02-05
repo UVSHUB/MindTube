@@ -1,0 +1,824 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 7842
+>>
+stream
+0.5670000000000001 w
+0 G
+0.4 0.49 0.92 rg
+0. 841.8899999999999864 595.2799999999999727 -99.2125984251968589 re
+f
+BT
+/F2 24 Tf
+27.5999999999999979 TL
+1. g
+189.2799999999999443 785.1970866141732586 Td
+(Learning Summary) Tj
+ET
+0.96 0.97 0.98 rg
+65.1968503937007995 728.5041732283464171 m
+530.0831496062991164 728.5041732283464171 l
+534.7797443292696471 728.5041732283464171 538.5870866141731312 724.6968309434429329 538.5870866141731312 720.0002362204724022 c
+538.5870866141731312 680.3151968503937042 l
+538.5870866141731312 675.6186021274231734 533.8904918912027142 671.8112598425196893 530.0831496062991164 671.8112598425196893 c
+65.1968503937007995 671.8112598425196893 l
+60.5002556707302688 671.8112598425196893 56.6929133858267775 676.5078545654901063 56.6929133858267775 680.3151968503937042 c
+56.6929133858267775 720.0002362204724022 l
+56.6929133858267775 724.6968309434429329 61.3895081087973011 728.5041732283464171 65.1968503937007995 728.5041732283464171 c
+h
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+0. g
+70.8661417322834666 700.15771653543311 Td
+(Ultimate React Native Crash Course) Tj
+ET
+0.4 0.49 0.92 rg
+0.4 0.49 0.92 RG
+62.3622047244094517 643.4648031496062686 m
+221.102362204724443 643.4648031496062686 l
+224.233425353371473 643.4648031496062686 226.7716535433071101 640.9265749596705746 226.7716535433071101 637.7955118110236299 c
+226.7716535433071101 626.4569291338582389 l
+226.7716535433071101 623.3258659852111805 223.6405903946600802 620.7876377952754865 221.102362204724443 620.7876377952754865 c
+62.3622047244094517 620.7876377952754865 l
+59.231141575762436 620.7876377952754865 56.6929133858267775 623.9187009439225449 56.6929133858267775 626.4569291338582389 c
+56.6929133858267775 637.7955118110236299 l
+56.6929133858267775 640.9265749596705746 59.8239765344737933 643.4648031496062686 62.3622047244094517 643.4648031496062686 c
+h
+B
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+1. g
+65.1968503937007995 629.291574803149615 Td
+(SUBJECT) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+240.9448818897637921 629.291574803149615 Td
+(Mobile Application Development) Tj
+ET
+0.46 0.29 0.64 rg
+0.46 0.29 0.64 RG
+62.3622047244094517 615.1183464566928478 m
+221.102362204724443 615.1183464566928478 l
+224.233425353371473 615.1183464566928478 226.7716535433071101 612.5801182667571538 226.7716535433071101 609.4490551181102092 c
+226.7716535433071101 598.1104724409448181 l
+226.7716535433071101 594.9794092922978734 223.6405903946600802 592.4411811023621794 221.102362204724443 592.4411811023621794 c
+62.3622047244094517 592.4411811023621794 l
+59.231141575762436 592.4411811023621794 56.6929133858267775 595.5722442510091241 56.6929133858267775 598.1104724409448181 c
+56.6929133858267775 609.4490551181102092 l
+56.6929133858267775 612.5801182667571538 59.8239765344737933 615.1183464566928478 62.3622047244094517 615.1183464566928478 c
+h
+B
+BT
+/F2 9 Tf
+10.3499999999999996 TL
+1. g
+65.1968503937007995 600.9451181102361943 Td
+(DIFFICULTY) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+240.9448818897637921 600.9451181102361943 Td
+(Beginner) Tj
+ET
+0.4 0.49 0.92 rg
+0.4 0.49 0.92 RG
+62.3622047244094517 592.4411811023621794 m
+532.9177952755904926 592.4411811023621794 l
+536.0488584242374372 592.4411811023621794 538.5870866141731312 589.9029529124264855 538.5870866141731312 586.7718897637794271 c
+538.5870866141731312 569.7640157480313974 l
+538.5870866141731312 566.6329525993844527 535.4560234655261866 564.0947244094487587 532.9177952755904926 564.0947244094487587 c
+62.3622047244094517 564.0947244094487587 l
+59.231141575762436 564.0947244094487587 56.6929133858267775 567.2257875580958171 56.6929133858267775 569.7640157480313974 c
+56.6929133858267775 586.7718897637794271 l
+56.6929133858267775 589.9029529124264855 59.8239765344737933 592.4411811023621794 62.3622047244094517 592.4411811023621794 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 572.5986614173227736 Td
+(SUMMARY) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 535.748267716535338 Td
+(This course provides a comprehensive introduction to React Native and Expo, covering the basics of React) Tj
+T* (Native components, navigation, and styling.) Tj
+ET
+1. 0.76 0.03 rg
+1. 0.76 0.03 RG
+62.3622047244094517 498.8978740157479592 m
+532.9177952755904926 498.8978740157479592 l
+536.0488584242374372 498.8978740157479592 538.5870866141731312 496.3596458258122652 538.5870866141731312 493.2285826771653205 c
+538.5870866141731312 476.220708661417234 l
+538.5870866141731312 473.0896455127702893 535.4560234655261866 470.5514173228345953 532.9177952755904926 470.5514173228345953 c
+62.3622047244094517 470.5514173228345953 l
+59.231141575762436 470.5514173228345953 56.6929133858267775 473.6824804714815969 56.6929133858267775 476.220708661417234 c
+56.6929133858267775 493.2285826771653205 l
+56.6929133858267775 496.3596458258122652 59.8239765344737933 498.8978740157479592 62.3622047244094517 498.8978740157479592 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+0. g
+65.1968503937007995 479.0553543307086102 Td
+(PREREQUISITES) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 442.2049606299212314 Td
+(1. Basic understanding of JavaScript and React) Tj
+ET
+0.3 0.69 0.31 rg
+0.3 0.69 0.31 RG
+62.3622047244094517 419.5277952755905062 m
+532.9177952755904926 419.5277952755905062 l
+536.0488584242374372 419.5277952755905062 538.5870866141731312 416.9895670856548122 538.5870866141731312 413.8585039370078107 c
+538.5870866141731312 396.850629921259781 l
+538.5870866141731312 393.7195667726127795 535.4560234655261866 391.1813385826770855 532.9177952755904926 391.1813385826770855 c
+62.3622047244094517 391.1813385826770855 l
+59.231141575762436 391.1813385826770855 56.6929133858267775 394.312401731324087 56.6929133858267775 396.850629921259781 c
+56.6929133858267775 413.8585039370078107 l
+56.6929133858267775 416.9895670856548122 59.8239765344737933 419.5277952755905062 62.3622047244094517 419.5277952755905062 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 399.6852755905511003 Td
+(LEARNING OBJECTIVES) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 362.8348818897637216 Td
+(1. Create and customize React Native components) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 334.4884251968503008 Td
+(2. Use navigation and routing in React Native) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 306.1419685039369369 Td
+(3. Customize the app logo and icon) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 277.7955118110235162 Td
+(4. Create a custom tab navigation bar and bottom navigation bar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 249.4490551181102092 Td
+(5. Use Tailwind CSS in a React Native project) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 221.1025984251967884 Td
+(6. Create and customize a splash screen) Tj
+ET
+0.13 0.59 0.95 rg
+0.13 0.59 0.95 RG
+62.3622047244094517 198.4254330708660632 m
+532.9177952755904926 198.4254330708660632 l
+536.0488584242374372 198.4254330708660632 538.5870866141731312 195.8872048809303692 538.5870866141731312 192.7561417322833677 c
+538.5870866141731312 175.748267716535338 l
+538.5870866141731312 172.6172045678883364 535.4560234655261866 170.0789763779526709 532.9177952755904926 170.0789763779526709 c
+62.3622047244094517 170.0789763779526709 l
+59.231141575762436 170.0789763779526709 56.6929133858267775 173.210039526599644 56.6929133858267775 175.748267716535338 c
+56.6929133858267775 192.7561417322833677 l
+56.6929133858267775 195.8872048809303692 59.8239765344737933 198.4254330708660632 62.3622047244094517 198.4254330708660632 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 178.5829133858267141 Td
+(KEY CONCEPTS) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 141.7325196850392786 Td
+(• React Native) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 113.3860629921258578 Td
+(• Expo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 85.0396062992125508 Td
+(• JavaScript) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 1406
+>>
+stream
+0.5670000000000001 w
+0.13 0.59 0.95 RG
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 785.1970866141732586 Td
+(• Mobile Application Development) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 756.8506299212598378 Td
+(• React) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 728.5041732283464171 Td
+(• Native Components) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 700.15771653543311 Td
+(• Cross-Platform Development) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 671.8112598425196893 Td
+(• UI/UX Design) Tj
+ET
+0.61 0.15 0.69 rg
+0.61 0.15 0.69 RG
+62.3622047244094517 649.1340944881889072 m
+532.9177952755904926 649.1340944881889072 l
+536.0488584242374372 649.1340944881889072 538.5870866141731312 646.5958662982532132 538.5870866141731312 643.4648031496062686 c
+538.5870866141731312 626.4569291338582389 l
+538.5870866141731312 623.3258659852111805 535.4560234655261866 620.7876377952754865 532.9177952755904926 620.7876377952754865 c
+62.3622047244094517 620.7876377952754865 l
+59.231141575762436 620.7876377952754865 56.6929133858267775 623.9187009439225449 56.6929133858267775 626.4569291338582389 c
+56.6929133858267775 643.4648031496062686 l
+56.6929133858267775 646.5958662982532132 59.8239765344737933 649.1340944881889072 62.3622047244094517 649.1340944881889072 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 629.291574803149615 Td
+(DETAILED EXPLANATION) Tj
+ET
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 7159
+>>
+stream
+0.5670000000000001 w
+0.61 0.15 0.69 RG
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 785.1970866141732586 Td
+() Tj
+T* (   INTRODUCTION TO REACT NATIVE) Tj
+T* () Tj
+T* (   React Native is a valuable skill to learn, and it allows developers to build mobile applications for both iOS) Tj
+T* (and Android using a single code base. The course starts with an introduction to React Native and its benefits,) Tj
+T* (including the ability to write once and run on multiple platforms. The instructor explains that React Native is a) Tj
+T* (great choice for building mobile applications, and it is used by many top companies such as Meta, Discord,) Tj
+T* (Microsoft, Tesla, Amazon, and Airbnb.) Tj
+T* () Tj
+T* (   The course then dives into the basics of React Native, including the setup and installation of the Expo) Tj
+T* (framework, which is an official React Native framework. The instructor explains how to create a new React) Tj
+T* (Native project using Expo and how to set up the development environment.) Tj
+T* () Tj
+T* (   KEY CONCEPTS IN REACT NATIVE) Tj
+T* () Tj
+T* (   The course covers several key concepts in React Native, including components, props, state, and) Tj
+T* (navigation. The instructor explains how to create and use components, including functional components and) Tj
+T* (class components. The instructor also covers the use of props and state in React Native components.) Tj
+T* () Tj
+T* (   The course then moves on to navigation in React Native, including the use of the Expo Router. The) Tj
+T* (instructor explains how to create routes and navigate between screens in a React Native application.) Tj
+T* () Tj
+T* (   REACT NATIVE COMPONENTS) Tj
+T* () Tj
+T* (   The course covers several React Native components, including the View component, the Text component,) Tj
+T* (and the Image component. The instructor explains how to use these components to build user interfaces in a) Tj
+T* (React Native application.) Tj
+T* () Tj
+T* (   The course also covers the use of Touchable components, including the TouchableOpacity and) Tj
+T* (TouchableHighlight components. The instructor explains how to use these components to create interactive) Tj
+T* (elements in a React Native application.) Tj
+T* () Tj
+T* (   REACT NATIVE STYLING) Tj
+T* () Tj
+T* (   The course covers the use of styling in React Native, including the use of CSS-like styles and the use of) Tj
+T* (external stylesheets. The instructor explains how to use the Stylesheet utility to create and manage styles in) Tj
+T* (a React Native application.) Tj
+T* () Tj
+T* (   The course also covers the use of the Tailwind CSS framework in React Native. The instructor explains how) Tj
+T* (to install and use Tailwind CSS in a React Native project.) Tj
+T* () Tj
+T* (   CUSTOMIZING THE APP) Tj
+T* () Tj
+T* (   The course covers the customization of the app, including the creation of a custom tab navigation bar. The) Tj
+T* (instructor explains how to create and customize the tab navigation bar, including the use of icons and labels.) Tj
+T* () Tj
+T* (   The course also covers the creation of a custom bottom navigation bar. The instructor explains how to) Tj
+T* (create and customize the bottom navigation bar, including the use of icons and labels.) Tj
+T* () Tj
+T* (   ROUTING IN REACT NATIVE) Tj
+T* () Tj
+T* (   The course covers the use of routing in React Native, including the use of the Expo Router. The instructor) Tj
+T* (explains how to create routes and navigate between screens in a React Native application.) Tj
+T* () Tj
+T* (   The course also covers the use of route grouping and route parameters. The instructor explains how to use) Tj
+T* (these features to create complex navigation flows in a React Native application.) Tj
+T* () Tj
+T* (   CUSTOMIZING THE LOGO AND ICON) Tj
+T* () Tj
+T* (   The course covers the customization of the app logo and icon. The instructor explains how to change the) Tj
+T* (logo and icon of the app, including the use of external image assets.) Tj
+T* () Tj
+T* (   The course also covers the creation of a custom splash screen. The instructor explains how to create and) Tj
+T* (customize the splash screen, including the use of external image assets.) Tj
+T* () Tj
+T* (   LEARNING OBJECTIVES) Tj
+T* () Tj
+T* (   After completing this course, students will be able to:) Tj
+T* (   - Create and customize React Native components) Tj
+T* (   - Use navigation and routing in React Native) Tj
+T* (   - Customize the app logo and icon) Tj
+T* (   - Create a custom tab navigation bar and bottom navigation bar) Tj
+T* (   - Use Tailwind CSS in a React Native project) Tj
+T* (   - Create and customize a splash screen) Tj
+T* () Tj
+T* (   EXAMPLES COVERED) Tj
+T* () Tj
+T* (   The course covers several examples, including:) Tj
+T* (   - Creating a custom tab navigation bar) Tj
+T* (   - Creating a custom bottom navigation bar) Tj
+T* (   - Customizing the app logo and icon) Tj
+T* (   - Creating a custom splash screen) Tj
+T* (   - Using Tailwind CSS in a React Native project) Tj
+T* () Tj
+T* (   PREREQUISITES) Tj
+T* () Tj
+T* (   The course assumes that students have a basic understanding of JavaScript and React. No prior) Tj
+T* (experience with React Native is required.) Tj
+T* () Tj
+T* (   KEY TAKEAWAYS) Tj
+T* () Tj
+T* (   The key takeaways from this course include:) Tj
+T* (   - React Native is a valuable skill to learn for mobile application development) Tj
+T* (   - Expo is an official React Native framework that simplifies the development process) Tj
+T* (   - React Native components can be customized using props and state) Tj
+T* (   - Navigation and routing are important concepts in React Native) Tj
+T* (   - Tailwind CSS can be used in a React Native project to simplify styling) Tj
+T* (   - The app logo and icon can be customized using external image assets) Tj
+T* () Tj
+T* (   SUMMARY) Tj
+T* () Tj
+T* (   This course provides a comprehensive introduction to React Native and Expo, covering the basics of React) Tj
+T* (Native components, navigation, and styling. The course also covers the customization of the app logo and) Tj
+T* (icon, as well as the creation of a custom splash screen. After completing this course, students will have a) Tj
+T* (solid understanding of React Native and be able to create and customize their own mobile applications.) Tj
+ET
+1. 0.6 0. rg
+1. 0.6 0. RG
+62.3622047244094517 -711.4958267716536966 m
+532.9177952755904926 -711.4958267716536966 l
+536.0488584242374372 -711.4958267716536966 538.5870866141731312 -714.0340549615893906 538.5870866141731312 -717.165118110236449 c
+538.5870866141731312 -734.1729921259844787 l
+538.5870866141731312 -737.3040552746314233 535.4560234655261866 -739.8422834645671173 532.9177952755904926 -739.8422834645671173 c
+62.3622047244094517 -739.8422834645671173 l
+59.231141575762436 -739.8422834645671173 56.6929133858267775 -736.7112203159201727 56.6929133858267775 -734.1729921259844787 c
+56.6929133858267775 -717.165118110236449 l
+56.6929133858267775 -714.0340549615893906 59.8239765344737933 -711.4958267716536966 62.3622047244094517 -711.4958267716536966 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 -731.3383464566931025 Td
+(EXAMPLES & DEMONSTRATIONS) Tj
+ET
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 10 0 R
+>>
+endobj
+10 0 obj
+<<
+/Length 2685
+>>
+stream
+0.5670000000000001 w
+1. 0.6 0. RG
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 785.1970866141732586 Td
+(Example 1: Creating a custom tab navigation bar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 756.8506299212598378 Td
+(Example 2: Creating a custom bottom navigation bar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 728.5041732283464171 Td
+(Example 3: Customizing the app logo and icon) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 700.15771653543311 Td
+(Example 4: Creating a custom splash screen) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 671.8112598425196893 Td
+(Example 5: Using Tailwind CSS in a React Native project) Tj
+ET
+0.91 0.12 0.39 rg
+0.91 0.12 0.39 RG
+62.3622047244094517 649.1340944881889072 m
+532.9177952755904926 649.1340944881889072 l
+536.0488584242374372 649.1340944881889072 538.5870866141731312 646.5958662982532132 538.5870866141731312 643.4648031496062686 c
+538.5870866141731312 626.4569291338582389 l
+538.5870866141731312 623.3258659852111805 535.4560234655261866 620.7876377952754865 532.9177952755904926 620.7876377952754865 c
+62.3622047244094517 620.7876377952754865 l
+59.231141575762436 620.7876377952754865 56.6929133858267775 623.9187009439225449 56.6929133858267775 626.4569291338582389 c
+56.6929133858267775 643.4648031496062686 l
+56.6929133858267775 646.5958662982532132 59.8239765344737933 649.1340944881889072 62.3622047244094517 649.1340944881889072 c
+h
+f
+BT
+/F2 12 Tf
+13.7999999999999989 TL
+1. g
+65.1968503937007995 629.291574803149615 Td
+(KEY TAKEAWAYS) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 592.4411811023621794 Td
+(1. React Native is a valuable skill to learn for mobile application development) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 564.0947244094487587 Td
+(2. Expo is an official React Native framework that simplifies the development process) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 535.748267716535338 Td
+(3. React Native components can be customized using props and state) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 507.4018110236219741 Td
+(4. Navigation and routing are important concepts in React Native) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 479.0553543307086102 Td
+(5. Tailwind CSS can be used in a React Native project to simplify styling) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0. g
+56.6929133858267775 450.7088976377952463 Td
+(6. The app logo and icon can be customized using external image assets) Tj
+ET
+0.4 0.49 0.92 rg
+0. 42.5196850393700814 595.2799999999999727 -42.5196850393700814 re
+f
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+1. g
+177.3199999999999363 14.1732283464566535 Td
+(Generated on 2/6/2026, 12:16:23 AM | MindTube Learning Assistant) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R ]
+/Count 4
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+21 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+22 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+23 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+24 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 11 0 R
+/F2 12 0 R
+/F3 13 0 R
+/F4 14 0 R
+/F5 15 0 R
+/F6 16 0 R
+/F7 17 0 R
+/F8 18 0 R
+/F9 19 0 R
+/F10 20 0 R
+/F11 21 0 R
+/F12 22 0 R
+/F13 23 0 R
+/F14 24 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+25 0 obj
+<<
+/Producer (jsPDF 2.5.1)
+/CreationDate (D:20260206001623+05'30')
+>>
+endobj
+26 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 27
+0000000000 65535 f 
+0000019865 00000 n 
+0000021705 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000008046 00000 n 
+0000008183 00000 n 
+0000009641 00000 n 
+0000009778 00000 n 
+0000016989 00000 n 
+0000017127 00000 n 
+0000019940 00000 n 
+0000020066 00000 n 
+0000020197 00000 n 
+0000020331 00000 n 
+0000020469 00000 n 
+0000020593 00000 n 
+0000020722 00000 n 
+0000020854 00000 n 
+0000020990 00000 n 
+0000021118 00000 n 
+0000021245 00000 n 
+0000021374 00000 n 
+0000021507 00000 n 
+0000021609 00000 n 
+0000021958 00000 n 
+0000022044 00000 n 
+trailer
+<<
+/Size 27
+/Root 26 0 R
+/Info 25 0 R
+/ID [ <5D94DEE37BC146C77002846E7B22BF02> <5D94DEE37BC146C77002846E7B22BF02> ]
+>>
+startxref
+22148
+%%EOF

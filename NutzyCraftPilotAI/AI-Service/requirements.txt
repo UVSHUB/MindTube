@@ -11,8 +11,8 @@ yt-dlp==2025.12.8
 spacy==3.8.2
 # Run after install: python -m spacy download en_core_web_sm
 
-# Google Gemini AI (new package)
-google-genai
+# AI Services
+groq==0.4.2
 
 # Utilities
 requests==2.32.3

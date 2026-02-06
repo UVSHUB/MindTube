@@ -84,7 +84,7 @@ async function startAnalysis() {
   }, 300);
 
   try {
-    const response = await fetch("http://209.97.161.131/ai/analyze", {
+    const response = await fetch(getAiUrl("/ai/analyze"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

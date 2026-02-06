@@ -123,7 +123,7 @@ public class AuthController {
                 // Since this is a simple setup, we'll assume relative path or hardcode
                 // localhost for this sprint if base url isn't config'd.
                 // Better: send just the link or constructed full URL.
-                String resetLink = "https://mind-tube-gilt.vercel.app/reset-password.html?token=" + token;
+                String resetLink = "https://pilotai.nutzycraft.com/reset-password.html?token=" + token;
                 emailService.sendPasswordResetEmail(email, resetLink);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -195,30 +195,40 @@
                     responseDiv.style.display = 'none';
 
                     try {
+                        console.log('Sending signup request...');
                         const response = await fetch(getApiUrl('/api/auth/register'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ fullName, email, password })
                         });
+                        
+                        console.log('Response status:', response.status);
+                        console.log('Response headers:', response.headers);
+                        
                         const result = await response.json();
+                        console.log('Response data:', result);
 
                         responseDiv.style.display = 'block';
                         responseDiv.innerText = result.message;
 
                         if (result.success) {
                             responseDiv.style.color = '#137333';
+                            console.log('Signup successful, redirecting...');
                             setTimeout(() => {
+                                console.log('Redirecting to verify-code.html');
                                 window.location.href = 'verify-code.html?email=' + encodeURIComponent(email);
                             }, 1500);
                         } else {
                             responseDiv.style.color = '#d93025';
                             btn.disabled = false;
                             btn.innerText = 'Create Account';
+                            console.error('Signup failed:', result.message);
                         }
                     } catch (error) {
+                        console.error('Signup error:', error);
                         responseDiv.style.display = 'block';
                         responseDiv.style.color = '#d93025';
-                        responseDiv.innerText = 'Something went wrong.';
+                        responseDiv.innerText = 'Something went wrong: ' + error.message;
                         btn.disabled = false;
                         btn.innerText = 'Create Account';
                     }

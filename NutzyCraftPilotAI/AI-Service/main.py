@@ -61,7 +61,7 @@ class AnalysisResponse(BaseModel):
 
 
 class TranscriptExtractor:
-    """Handles YouTube transcript extraction using youtube-transcript-api"""
+    """Handles YouTube transcript extraction using yt-dlp with cookie support"""
     
     @staticmethod
     def extract_video_id(youtube_url: str) -> str:
@@ -93,7 +93,7 @@ class TranscriptExtractor:
     @staticmethod
     def extract_transcript(youtube_url: str) -> tuple[str, int]:
         """
-        Extract transcript and duration from YouTube video using YouTube Data API v3
+        Extract transcript and duration from YouTube video using yt-dlp
         
         Args:
             youtube_url: The YouTube video URL
@@ -104,157 +104,102 @@ class TranscriptExtractor:
         try:
             logger.info(f"Extracting transcript from: {youtube_url}")
             
-            # Extract video ID
-            video_id = TranscriptExtractor.extract_video_id(youtube_url)
-            logger.info(f"Video ID: {video_id}")
+            import sys
+            # Command to get transcript and metadata
+            command = [
+                sys.executable, "-m", "yt_dlp",
+                "--skip-download",
+                "--write-auto-subs",
+                "--write-subs",
+                "--sub-lang", "en",
+                "--sub-format", "json3",
+                "--output", "temp_transcript",
+                "--write-info-json",
+                "--cookies", "cookies.txt",  # Use cookies file
+                "--quiet",
+                "--no-warnings",
+                youtube_url
+            ]
             
-            # Get API key from environment
-            api_key = os.getenv('YOUTUBE_API_KEY')
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
             
-            # Try Method 1: youtube-transcript-api with cookies (fastest)
-            try:
-                from youtube_transcript_api import YouTubeTranscriptApi
-                from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
-                
-                logger.info("Attempting transcript extraction via youtube-transcript-api")
-                
-                # Try to get English transcript first
+            # Check for errors
+            if result.returncode != 0 and result.stderr:
+                logger.warning(f"yt-dlp stderr: {result.stderr}")
+            
+            # Get duration from info.json
+            duration = 0
+            info_file = Path("temp_transcript.info.json")
+            if info_file.exists():
                 try:
-                    transcript_list = YouTubeTranscriptApi.get_transcript(
-                        video_id, 
-                        languages=['en', 'en-US', 'en-GB']
-                    )
-                except NoTranscriptFound:
-                    # If no English, try auto-generated
-                    logger.warning("No manual transcript found, trying auto-generated")
-                    transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-                
-                # Combine all transcript segments
-                transcript_parts = [entry['text'] for entry in transcript_list]
-                transcript = ' '.join(transcript_parts)
-                
-                # Calculate duration from last timestamp
-                duration = 0
-                if transcript_list:
-                    last_entry = transcript_list[-1]
-                    duration = int(last_entry['start'] + last_entry.get('duration', 0))
-                
-                logger.info(f"✅ Successfully extracted via youtube-transcript-api: {len(transcript)} chars")
-                return transcript, duration
-                
-            except (TranscriptsDisabled, NoTranscriptFound, Exception) as api_error:
-                logger.warning(f"youtube-transcript-api failed: {api_error}")
-                
-                # Method 2: Fallback to YouTube Data API v3 (if API key available)
-                if api_key:
-                    logger.info("Attempting fallback to YouTube Data API v3")
-                    return TranscriptExtractor._extract_via_youtube_api(video_id, api_key)
-                else:
-                    logger.error("No YouTube API key configured for fallback")
-                    raise Exception("No captions/subtitles available for this video. Please configure YOUTUBE_API_KEY in .env for better reliability.")
+                    with open(info_file, 'r', encoding='utf-8') as f:
+                        info_data = json.load(f)
+                        duration = int(info_data.get('duration', 0))
+                except Exception as e:
+                    logger.warning(f"Could not parse duration: {e}")
+
+            # Find subtitle file
+            subtitle_patterns = [
+                "temp_transcript.en.json3",
+                "temp_transcript.json3",
+                "temp_transcript.en-US.json3",
+                "temp_transcript.en-GB.json3"
+            ]
             
+            subtitle_file = None
+            for pattern in subtitle_patterns:
+                file_path = Path(pattern)
+                if file_path.exists():
+                    subtitle_file = file_path
+                    break
+            
+            if not subtitle_file:
+                # Clean up temp files
+                for p in Path(".").glob("temp_transcript*"):
+                    p.unlink(missing_ok=True)
+                raise Exception("No captions/subtitles available for this video. Captions may be disabled or cookies may need refreshing.")
+            
+            # Parse JSON subtitle file
+            with open(subtitle_file, 'r', encoding='utf-8') as f:
+                subtitle_data = json.load(f)
+            
+            transcript_parts = []
+            if 'events' in subtitle_data:
+                for event in subtitle_data['events']:
+                    if 'segs' in event:
+                        for seg in event['segs']:
+                            if 'utf8' in seg:
+                                transcript_parts.append(seg['utf8'])
+            
+            # Clean up temp files
+            for p in Path(".").glob("temp_transcript*"):
+                p.unlink(missing_ok=True)
+            
+            if not transcript_parts:
+                raise Exception("Extracted subtitle file is empty")
+            
+            transcript = ' '.join(transcript_parts)
+            logger.info(f"✅ Extracted transcript: {len(transcript)} chars, Duration: {duration}s")
+            
+            return transcript, duration
+            
+        except subprocess.TimeoutExpired:
+            logger.error("Transcript extraction timed out")
+            raise Exception("Transcript extraction timed out")
         except ValueError as e:
             logger.error(f"Invalid YouTube URL: {e}")
             raise Exception(f"Invalid YouTube URL: {str(e)}")
         except Exception as e:
             logger.error(f"Transcript extraction error: {str(e)}")
+            # Clean up temp files
+            for p in Path(".").glob("temp_transcript*"):
+                p.unlink(missing_ok=True)
             raise Exception(f"Failed to extract transcript: {str(e)}")
-    
-    @staticmethod
-    def _extract_via_youtube_api(video_id: str, api_key: str) -> tuple[str, int]:
-        """
-        Extract transcript using official YouTube Data API v3
-        
-        Args:
-            video_id: YouTube video ID
-            api_key: YouTube Data API key
-            
-        Returns:
-            Tuple of (transcript text, duration in seconds)
-        """
-        try:
-            from googleapiclient.discovery import build
-            from googleapiclient.errors import HttpError
-            
-            # Build YouTube API client
-            youtube = build('youtube', 'v3', developerKey=api_key)
-            
-            # Get video details for duration
-            video_response = youtube.videos().list(
-                part='contentDetails,snippet',
-                id=video_id
-            ).execute()
-            
-            if not video_response['items']:
-                raise Exception("Video not found")
-            
-            # Extract duration (in ISO 8601 format like PT15M33S)
-            duration_iso = video_response['items'][0]['contentDetails']['duration']
-            duration = TranscriptExtractor._parse_iso_duration(duration_iso)
-            
-            # Get captions list
-            captions_response = youtube.captions().list(
-                part='snippet',
-                videoId=video_id
-            ).execute()
-            
-            if not captions_response.get('items'):
-                raise Exception("No captions available for this video")
-            
-            # Find English caption track
-            caption_id = None
-            for caption in captions_response['items']:
-                if caption['snippet']['language'] in ['en', 'en-US', 'en-GB']:
-                    caption_id = caption['id']
-                    break
-            
-            if not caption_id:
-                # Fallback to first available caption
-                caption_id = captions_response['items'][0]['id']
-            
-            # Download caption
-            caption_data = youtube.captions().download(
-                id=caption_id,
-                tfmt='srt'  # SubRip format
-            ).execute()
-            
-            # Parse SRT format to plain text
-            transcript = TranscriptExtractor._parse_srt(caption_data)
-            
-            logger.info(f"✅ Successfully extracted via YouTube Data API: {len(transcript)} chars")
-            return transcript, duration
-            
-        except HttpError as e:
-            logger.error(f"YouTube API error: {e}")
-            if e.resp.status == 403:
-                raise Exception("YouTube API quota exceeded or invalid API key")
-            else:
-                raise Exception(f"YouTube API error: {str(e)}")
-        except Exception as e:
-            logger.error(f"YouTube API extraction failed: {e}")
-            raise Exception(f"Failed to extract captions via YouTube API: {str(e)}")
-    
-    @staticmethod
-    def _parse_iso_duration(duration_iso: str) -> int:
-        """Parse ISO 8601 duration (e.g., PT15M33S) to seconds"""
-        import re
-        match = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', duration_iso)
-        if not match:
-            return 0
-        hours = int(match.group(1) or 0)
-        minutes = int(match.group(2) or 0)
-        seconds = int(match.group(3) or 0)
-        return hours * 3600 + minutes * 60 + seconds
-    
-    @staticmethod
-    def _parse_srt(srt_content: str) -> str:
-        """Parse SRT subtitle format to plain text"""
-        import re
-        # Remove subtitle numbers and timestamps
-        text = re.sub(r'\d+\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n', '', srt_content)
-        # Remove empty lines
-        text = '\n'.join([line for line in text.split('\n') if line.strip()])
-        return text.replace('\n', ' ').strip()
 
 
 class NLPPreprocessor:

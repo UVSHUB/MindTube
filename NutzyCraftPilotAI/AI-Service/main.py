@@ -88,6 +88,7 @@ class TranscriptExtractor:
                 "--sub-format", "json3",
                 "--output", "temp_transcript",
                 "--write-info-json",  # Get all metadata including duration
+                "--cookies", "cookies.txt",  # Use cookies to bypass bot detection
                 "--quiet",
                 "--no-warnings",
                 youtube_url

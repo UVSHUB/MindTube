@@ -6,6 +6,7 @@ python-multipart==0.0.6
 
 # YouTube transcript extraction
 youtube-transcript-api==0.6.2
+google-api-python-client==2.108.0
 
 # NLP processing
 spacy==3.8.2

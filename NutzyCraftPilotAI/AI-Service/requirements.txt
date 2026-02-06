@@ -12,7 +12,7 @@ spacy==3.8.2
 # Run after install: python -m spacy download en_core_web_sm
 
 # AI Services
-groq==0.4.2
+groq>=1.0.0
 
 # Utilities
 requests==2.32.3

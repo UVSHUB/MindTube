@@ -70,7 +70,10 @@ public class UserController {
         }
 
         if (user == null) {
-            return ResponseEntity.status(401).build();
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "User not found.");
+            return ResponseEntity.status(404).body(error);
         }
 
         if (payload.containsKey("fullName")) {

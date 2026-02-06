@@ -238,7 +238,7 @@
 
             try {
                 // First, update profile info (name, email) if changed
-                const res = await fetch('/api/user/me', {
+                const res = await fetch(getApiUrl('/api/user/me'), {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -248,11 +248,19 @@
                     })
                 });
                 
+                // Check if response is JSON before parsing
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    console.error('Server returned non-JSON response:', res.status, res.statusText);
+                    alert('Failed to update profile: Server error. Please try again.');
+                    return;
+                }
+                
                 const result = await res.json();
                 console.log('Profile update response:', result);
                 
-                if (!res.ok) {
-                    console.error('Server returned error status:', res.status, result);
+                if (!res.ok || !result.success) {
+                    console.error('Server returned error:', res.status, result);
                     alert('Failed to update profile: ' + (result.message || `Server error ${res.status}`));
                     return;
                 }

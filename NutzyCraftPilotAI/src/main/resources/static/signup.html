@@ -196,14 +196,24 @@
 
                     try {
                         console.log('Sending signup request...');
+                        console.log('API URL:', getApiUrl('/api/auth/register'));
+                        console.log('Payload:', { fullName, email, password: '***' });
+                        
+                        // Add timeout to prevent hanging
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+                        
                         const response = await fetch(getApiUrl('/api/auth/register'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ fullName, email, password })
+                            body: JSON.stringify({ fullName, email, password }),
+                            signal: controller.signal
                         });
                         
+                        clearTimeout(timeoutId);
+                        
                         console.log('Response status:', response.status);
-                        console.log('Response headers:', response.headers);
+                        console.log('Response OK:', response.ok);
                         
                         const result = await response.json();
                         console.log('Response data:', result);
@@ -226,9 +236,18 @@
                         }
                     } catch (error) {
                         console.error('Signup error:', error);
+                        console.error('Error name:', error.name);
+                        console.error('Error message:', error.message);
+                        
                         responseDiv.style.display = 'block';
                         responseDiv.style.color = '#d93025';
-                        responseDiv.innerText = 'Something went wrong: ' + error.message;
+                        
+                        if (error.name === 'AbortError') {
+                            responseDiv.innerText = 'Request timed out. Please check your connection and try again.';
+                        } else {
+                            responseDiv.innerText = 'Network error: ' + error.message;
+                        }
+                        
                         btn.disabled = false;
                         btn.innerText = 'Create Account';
                     }

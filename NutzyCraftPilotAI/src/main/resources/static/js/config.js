@@ -1,7 +1,7 @@
 // API Configuration
 // Change this URL when deploying to different environments
-const API_BASE_URL = 'http://209.97.161.131';
-const AI_BASE_URL = 'http://209.97.161.131';
+const API_BASE_URL = 'https://pilotai-backend.nutzycraft.com';
+const AI_BASE_URL = 'https://pilotai-backend.nutzycraft.com';
 
 // Helper function to build API URLs
 function getApiUrl(endpoint) {

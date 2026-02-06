@@ -103,17 +103,92 @@
 @media(max-width: 900px) {
     .console-layout {
         grid-template-columns: 1fr;
+        margin-top: 2rem;
     }
 
     .sidebar {
         display: flex;
         overflow-x: auto;
-        padding-bottom: 1rem;
-        position: static;
+        padding-bottom: 0.5rem;
+        position: sticky;
+        top: 5rem;
         margin-bottom: 2rem;
+        background: #f8f9fa;
+        z-index: 90;
+        gap: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+    }
+    
+    .sidebar::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+
+    .sidebar-section-title {
+        display: none; /* Hide titles on mobile for cleaner bar */
     }
 
     .sidebar-link {
         white-space: nowrap;
+        margin-bottom: 0;
+        border: 1px solid var(--labs-border);
+        background: white;
+    }
+    
+    .sidebar-link.active {
+        background: var(--labs-black);
+        color: white;
+        border-color: var(--labs-black);
+    }
+}
+
+@media(max-width: 600px) {
+    .input-wrapper {
+        flex-wrap: wrap;
+        padding: 1rem !important;
+        gap: 0.75rem;
+        border-radius: 20px;
+    }
+    
+    #attachBtn {
+        order: 1;
+    }
+    
+    .url-input {
+        order: 2;
+        min-width: calc(100% - 60px); /* Fill remaining space next to plus */
+    }
+    
+    #analyzeBtn {
+        order: 3;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* responsive card padding */
+.dashboard-card {
+    padding: 3rem;
+    background: #fff;
+    border: 1px solid var(--labs-border);
+}
+
+@media(max-width: 600px) {
+    .dashboard-card {
+        padding: 1.5rem !important;
+    }
+}
+
+.analyze-btn {
+    padding: 0.75rem 2rem;
+}
+
+@media (max-width: 600px) {
+    /* Hide profile name in navbar on mobile, show only avatar */
+    .navbar a[href="settings.html"] span {
+        display: none;
+    }
+    .navbar a[href="settings.html"] {
+        padding-left: 0.25rem !important;
     }
 }

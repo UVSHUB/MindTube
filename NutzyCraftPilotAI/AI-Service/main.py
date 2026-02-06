@@ -61,7 +61,34 @@ class AnalysisResponse(BaseModel):
 
 
 class TranscriptExtractor:
-    """Handles YouTube transcript extraction using yt-dlp"""
+    """Handles YouTube transcript extraction using youtube-transcript-api"""
+    
+    @staticmethod
+    def extract_video_id(youtube_url: str) -> str:
+        """
+        Extract video ID from various YouTube URL formats
+        
+        Args:
+            youtube_url: The YouTube video URL
+            
+        Returns:
+            Video ID string
+        """
+        import re
+        
+        # Patterns for different YouTube URL formats
+        patterns = [
+            r'(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})',
+            r'youtube\.com\/embed\/([a-zA-Z0-9_-]{11})',
+            r'youtube\.com\/v\/([a-zA-Z0-9_-]{11})',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, youtube_url)
+            if match:
+                return match.group(1)
+        
+        raise ValueError(f"Could not extract video ID from URL: {youtube_url}")
     
     @staticmethod
     def extract_transcript(youtube_url: str) -> tuple[str, int]:
@@ -75,93 +102,50 @@ class TranscriptExtractor:
             Tuple of (transcript text, duration in seconds)
         """
         try:
-            logger.info(f"Extracting transcript and metadata from: {youtube_url}")
+            from youtube_transcript_api import YouTubeTranscriptApi
+            from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
             
-            import sys
-            # Command to get duration and try to get subs
-            command = [
-                sys.executable, "-m", "yt_dlp",
-                "--skip-download",
-                "--write-auto-subs",
-                "--write-subs",
-                "--sub-lang", "en",
-                "--sub-format", "json3",
-                "--output", "temp_transcript",
-                "--write-info-json",  # Get all metadata including duration
-                "--cookies", "cookies.txt",  # Use cookies to bypass bot detection
-                "--quiet",
-                "--no-warnings",
-                youtube_url
-            ]
+            logger.info(f"Extracting transcript from: {youtube_url}")
             
-            subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
+            # Extract video ID
+            video_id = TranscriptExtractor.extract_video_id(youtube_url)
+            logger.info(f"Video ID: {video_id}")
             
-            # 1. Get duration from info.json
-            duration = 0
-            info_file = Path("temp_transcript.info.json")
-            if info_file.exists():
-                try:
-                    with open(info_file, 'r', encoding='utf-8') as f:
-                        info_data = json.load(f)
-                        duration = int(info_data.get('duration', 0))
-                except Exception as e:
-                    logger.warning(f"Could not parse info.json: {e}")
-            else:
-                logger.warning("info.json not found, duration will be 0")
-
-            # 2. Check for subtitle files
-            subtitle_patterns = [
-                "temp_transcript.en.json3",
-                "temp_transcript.json3",
-                "temp_transcript.en-US.json3",
-                "temp_transcript.en-GB.json3"
-            ]
+            # Get transcript
+            try:
+                # Try to get English transcript first
+                transcript_list = YouTubeTranscriptApi.get_transcript(
+                    video_id, 
+                    languages=['en', 'en-US', 'en-GB']
+                )
+            except NoTranscriptFound:
+                # If no English, try auto-generated
+                logger.warning("No manual transcript found, trying auto-generated")
+                transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
             
-            subtitle_file = None
-            for pattern in subtitle_patterns:
-                file_path = Path(pattern)
-                if file_path.exists():
-                    subtitle_file = file_path
-                    break
-            
-            if not subtitle_file:
-                # Clean up any partial files before raising
-                for p in Path(".").glob("temp_transcript*"):
-                    p.unlink(missing_ok=True)
-                raise Exception("No captions/subtitles available for this video.")
-            
-            # 3. Parse the JSON subtitle file
-            with open(subtitle_file, 'r', encoding='utf-8') as f:
-                subtitle_data = json.load(f)
-            
-            transcript_parts = []
-            if 'events' in subtitle_data:
-                for event in subtitle_data['events']:
-                    if 'segs' in event:
-                        for seg in event['segs']:
-                            if 'utf8' in seg:
-                                transcript_parts.append(seg['utf8'])
-            
-            # 4. Clean up all temp files
-            for p in Path(".").glob("temp_transcript*"):
-                p.unlink(missing_ok=True)
-            
-            if not transcript_parts:
-                raise Exception("Extracted subtitle file is empty")
-            
+            # Combine all transcript segments
+            transcript_parts = [entry['text'] for entry in transcript_list]
             transcript = ' '.join(transcript_parts)
+            
+            # Calculate duration from last timestamp
+            duration = 0
+            if transcript_list:
+                last_entry = transcript_list[-1]
+                duration = int(last_entry['start'] + last_entry.get('duration', 0))
+            
             logger.info(f"Extracted transcript: {len(transcript)} chars, Duration: {duration}s")
             
             return transcript, duration
             
-        except subprocess.TimeoutExpired:
-            logger.error("Transcript extraction timed out")
-            raise Exception("Transcript extraction timed out after 60 seconds")
+        except TranscriptsDisabled:
+            logger.error("Transcripts are disabled for this video")
+            raise Exception("This video does not have transcripts enabled")
+        except NoTranscriptFound:
+            logger.error("No transcript found for this video")
+            raise Exception("No captions/subtitles available for this video")
+        except ValueError as e:
+            logger.error(f"Invalid YouTube URL: {e}")
+            raise Exception(f"Invalid YouTube URL: {str(e)}")
         except Exception as e:
             logger.error(f"Transcript extraction error: {str(e)}")
             # Clean up any temp files on error

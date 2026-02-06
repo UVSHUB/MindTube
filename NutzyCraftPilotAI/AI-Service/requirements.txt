@@ -5,7 +5,7 @@ pydantic==2.10.0
 python-multipart==0.0.6
 
 # YouTube transcript extraction
-yt-dlp==2025.12.8
+youtube-transcript-api==0.6.2
 
 # NLP processing
 spacy==3.8.2

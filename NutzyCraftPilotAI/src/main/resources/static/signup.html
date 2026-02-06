@@ -15,6 +15,20 @@
             text-align: left;
         }
 
+        .auth-card {
+            padding: 3rem;
+            text-align: center;
+            max-width: 440px;
+            width: 100%;
+            background: white;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 1.5rem;
+            }
+        }
+
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
@@ -100,7 +114,7 @@
 <body style="background-color: var(--labs-off-white);">
     <div class="container"
         style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
-        <div class="card" style="padding: 3rem; text-align: center; max-width: 440px; width: 100%; background: white;">
+        <div class="card auth-card">
             <!-- Logo -->
             <a href="index.html" class="logo" style="justify-content: center; margin-bottom: 2rem;">
                 <img src="images/logo.jpg" alt="Nutzy Craft Logo" style="height: 48px; border-radius: 50%;">
@@ -111,15 +125,7 @@
             <p style="margin-bottom: 2rem;">Start your free trial today.</p>
 
             <!-- Social Login -->
-            <!-- Social Login -->
-            <div id="g_id_onload"
-                 data-client_id="613986529272-5q7b4qaqb82i5en6r15r3dnr7l7acqm0.apps.googleusercontent.com"
-                 data-callback="handleCredentialResponse"
-                 data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signup_with"
-                data-shape="rectangular" data-logo_alignment="left" data-width="344">
-            </div>
+            <div id="google_btn_wrapper" style="width: 100%; display: flex; justify-content: center;"></div>
 
             <div class="divider"><span>OR</span></div>
 
@@ -156,6 +162,49 @@
             <div id="signupResponse" style="margin-top: 1rem; display: none;"></div>
 
             <script>
+                // Initialize Google Sign-In
+                function initGoogleSignIn() {
+                    google.accounts.id.initialize({
+                        client_id: "613986529272-5q7b4qaqb82i5en6r15r3dnr7l7acqm0.apps.googleusercontent.com",
+                        callback: handleCredentialResponse,
+                        auto_prompt: false
+                    });
+                    renderGoogleButton();
+                }
+
+                function renderGoogleButton() {
+                    const container = document.getElementById('google_btn_wrapper');
+                    // Calculate precise width (subtracting any potential padding issues if needed, but clientWidth should be safe)
+                    // If container is hidden or 0, default to min 200
+                    const width = container.clientWidth || 300; 
+                    
+                    google.accounts.id.renderButton(
+                        container,
+                        { 
+                            type: "standard", 
+                            size: "large", 
+                            theme: "outline", 
+                            text: "signup_with", 
+                            shape: "rectangular",
+                            width: width
+                        }
+                    );
+                }
+
+                // Re-render on resize with debounce
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        // Clear old button
+                        document.getElementById('google_btn_wrapper').innerHTML = '';
+                        renderGoogleButton();
+                    }, 200);
+                });
+
+                // Load on window load
+                window.onload = initGoogleSignIn;
+
                 async function handleCredentialResponse(response) {
                     try {
                         const res = await fetch(getApiUrl('/api/auth/google'), {

@@ -6,6 +6,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Labs Theme Loaded');
 
+    // Mobile Menu Toggle
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const navCollapse = document.querySelector('.nav-collapse');
+    
+    if (mobileBtn && navCollapse) {
+        mobileBtn.addEventListener('click', () => {
+            navCollapse.classList.toggle('active');
+            
+            // Optional: Animate hamburger to X
+            // mobileBtn.classList.toggle('open'); 
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navCollapse.contains(e.target) && !mobileBtn.contains(e.target) && navCollapse.classList.contains('active')) {
+                navCollapse.classList.remove('active');
+            }
+        });
+    }
+
     // Smooth Scrolling for Anchors
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

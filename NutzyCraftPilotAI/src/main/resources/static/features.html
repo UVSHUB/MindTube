@@ -20,18 +20,27 @@
             Nutzy Craft <span>PilotAI</span>
         </a>
 
-        <!-- Center Links -->
-        <div class="nav-links"
-            style="position: absolute; left: 50%; transform: translateX(-50%); gap: 2.5rem; display: flex;">
-            <a href="index.html">Home</a>
-            <a href="features.html" style="color: var(--labs-black); font-weight: 600;">Features</a>
-            <a href="pricing.html">Pricing</a>
-            <a href="about.html">About</a>
-        </div>
+        <!-- Mobile Toggle -->
+        <button class="mobile-menu-btn" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-        <div style="margin-left: auto; display: flex; gap: 1rem; align-items: center;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: var(--labs-black);">Sign in</a>
-            <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">Sign Up</a>
+        <!-- Collapsible Content -->
+        <div class="nav-collapse">
+            <!-- Center Links -->
+            <div class="nav-links" style="position: absolute; left: 50%; transform: translateX(-50%); gap: 2.5rem; display: flex;">
+                <a href="index.html">Home</a>
+                <a href="features.html" style="color: var(--labs-black); font-weight: 600;">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="about.html">About</a>
+            </div>
+
+            <div class="nav-buttons" style="margin-left: auto; display: flex; gap: 1rem; align-items: center;">
+                <a href="login.html" style="font-size: 1rem; font-weight: 500; color: var(--labs-black);">Sign in</a>
+                <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">Sign Up</a>
+            </div>
         </div>
     </nav>
 
@@ -44,19 +53,18 @@
 
         <!-- Feature 1: Deep Semantic Analysis -->
         <section class="mb-4">
-            <div class="split-layout reverse-mobile"
-                style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; margin-bottom: 8rem;">
+            <div style="max-width: 800px; margin: 0 auto 8rem; text-align: center;">
                 <div class="scroll-reveal">
                     <div
-                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                         <span style="font-size: 1.5rem;">📝</span>
                     </div>
                     <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Smart Video
                         Summarization</h2>
-                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem;">
+                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem; margin-left: auto; margin-right: auto;">
                          Get comprehensive summaries of long lectures in seconds. Our AI extracts key concepts, definitions, and timelines so you can review faster.
                     </p>
-                    <ul style="list-style: none; padding: 0; color: var(--labs-grey);">
+                    <ul style="list-style: none; padding: 0; color: var(--labs-grey); display: inline-block; text-align: left;">
                         <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;">
                             <span style="color: var(--labs-black);">✓</span> Key points extraction
                         </li>
@@ -68,38 +76,23 @@
                         </li>
                     </ul>
                 </div>
-                <!-- UI Preview (Right) -->
-                <div class="card scroll-reveal delay-100"
-                    style="background: #f8f9fa; height: 400px; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid var(--labs-border); overflow: hidden; padding: 0;">
-                    <img src="images/semantic_dashboard.png" alt="Semantic Analysis Dashboard"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
             </div>
         </section>
 
         <!-- Feature 2: Hook Optimization -->
         <section class="mb-4">
-            <div class="split-layout reverse-mobile"
-                style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; align-items: center; margin-bottom: 8rem;">
-                <!-- UI Preview (Left) -->
-                <div class="card scroll-reveal"
-                    style="background: #f8f9fa; height: 400px; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid var(--labs-border); overflow: hidden; padding: 0;">
-                    <img src="images/hook_graph.png" alt="Hook Optimization Graph"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-
-                <!-- Text (Right) -->
-                <div class="scroll-reveal delay-100">
+            <div style="max-width: 800px; margin: 0 auto 8rem; text-align: center;">
+                <div class="scroll-reveal">
                     <div
-                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                         <span style="font-size: 1.5rem;">🧠</span>
                     </div>
                     <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Deep Explanations
                     </h2>
-                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem;">
+                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem; margin-left: auto; margin-right: auto;">
                         Don't just watch—understand. Ask the AI to explain complex topics, simplify difficult jargon, or provide real-world examples.
                     </p>
-                    <ul style="list-style: none; padding: 0; color: var(--labs-grey);">
+                    <ul style="list-style: none; padding: 0; color: var(--labs-grey); display: inline-block; text-align: left;">
                         <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;">
                             <span style="color: var(--labs-black);">✓</span> Topic mastery
                         </li>
@@ -116,20 +109,18 @@
 
         <!-- Feature 3: Trend Forecasting -->
         <section class="mb-4">
-            <div class="split-layout reverse-mobile"
-                style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; margin-bottom: 8rem;">
-                <!-- Text (Left) -->
+            <div style="max-width: 800px; margin: 0 auto 8rem; text-align: center;">
                 <div class="scroll-reveal">
                     <div
-                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        style="width: 64px; height: 64px; background: white; border: 1px solid var(--labs-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                         <span style="font-size: 1.5rem;">💾</span>
                     </div>
                     <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -0.02em;">Export & Integration
                     </h2>
-                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem;">
+                    <p style="font-size: 1.1rem; color: var(--labs-grey); line-height: 1.6; margin-bottom: 2rem; margin-left: auto; margin-right: auto;">
                         Take your notes with you. Export your summaries to PDF or save them directly to your personal Google Drive for anytime access.
                     </p>
-                    <ul style="list-style: none; padding: 0; color: var(--labs-grey);">
+                    <ul style="list-style: none; padding: 0; color: var(--labs-grey); display: inline-block; text-align: left;">
                         <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;">
                             <span style="color: var(--labs-black);">✓</span> One-click PDF Export
                         </li>
@@ -140,12 +131,6 @@
                             <span style="color: var(--labs-black);">✓</span> Copy to Notion/Docs
                         </li>
                     </ul>
-                </div>
-                <!-- UI Preview (Right) -->
-                <div class="card scroll-reveal delay-100"
-                    style="background: #f8f9fa; height: 400px; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid var(--labs-border); overflow: hidden; padding: 0;">
-                    <img src="images/trend_chart.png" alt="Trend Forecasting Chart"
-                        style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             </div>
         </section>

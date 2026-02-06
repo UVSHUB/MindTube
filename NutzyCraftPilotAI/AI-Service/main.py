@@ -151,7 +151,9 @@ class TranscriptExtractor:
             duration = 0
             if transcript_entries:
                 last_entry = transcript_entries[-1]
-                duration = int(last_entry.get('start', 0) + last_entry.get('duration', 0))
+                start = float(last_entry.get('start', 0))
+                dur = float(last_entry.get('duration', 0))
+                duration = int(start + dur)
             
             logger.info(f"✅ Extracted transcript: {len(transcript)} chars, Duration: {duration}s")
             

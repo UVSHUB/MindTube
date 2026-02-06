@@ -277,6 +277,101 @@ GROQ_API_KEY=your_groq_api_key
 RAPIDAPI_KEY=your_rapidapi_key
 ```
 
+### Java Backend Environment Variables
+
+**Location:** `/etc/systemd/system/pilotai-backend.service`
+
+The backend uses environment variables defined in the systemd service file.
+
+**Key variables:**
+
+```bash
+# Database
+SPRING_DATASOURCE_URL=jdbc:postgresql://...
+SPRING_DATASOURCE_USERNAME=postgres.xxxxx
+SPRING_DATASOURCE_PASSWORD=xxxxx
+
+# SendGrid Email (HTTP API - SMTP is blocked by DigitalOcean)
+SENDGRID_API_KEY=SG.xxxxx
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=xxxxx
+CLOUDINARY_API_KEY=xxxxx
+CLOUDINARY_API_SECRET=xxxxx
+```
+
+**⚠️ Important:** DigitalOcean blocks SMTP ports (25, 587, 465) to prevent spam. We use **SendGrid HTTP API** instead of SMTP.
+
+---
+
+## 📧 SendGrid Email Configuration
+
+### Why SendGrid?
+
+DigitalOcean blocks all SMTP ports on droplets. SendGrid's HTTP API uses HTTPS (port 443) which is not blocked.
+
+### Setup Instructions
+
+1. **Create SendGrid Account**
+   - Sign up at https://signup.sendgrid.com/
+   - Free tier: 100 emails/day (perfect for verification emails)
+
+2. **Verify Single Sender** (No domain needed)
+   - Go to **Settings** → **Sender Authentication**
+   - Click **"Verify a Single Sender"**
+   - Use: `nutzycraft@gmail.com` (or your email)
+   - Check your email and verify
+
+3. **Create API Key**
+   - Go to **Settings** → **API Keys**
+   - Create new key with **Full Access** or **Mail Send** permission
+   - Copy the API key (starts with `SG.`)
+
+4. **Update Server**
+
+   ```bash
+   ssh root@209.97.161.131
+   nano /etc/systemd/system/pilotai-backend.service
+   ```
+
+   Add this line:
+
+   ```
+   Environment="SENDGRID_API_KEY=SG.your_api_key_here"
+   ```
+
+5. **Reload and Restart**
+   ```bash
+   systemctl daemon-reload
+   systemctl restart pilotai-backend
+   systemctl status pilotai-backend
+   ```
+
+### Testing Email
+
+```bash
+# Watch logs while signing up
+journalctl -u pilotai-backend -f
+
+# You should see:
+# ✅ Email sent successfully via SendGrid to: user@example.com
+```
+
+### Troubleshooting Email Issues
+
+**Emails not sending?**
+
+```bash
+# Check logs for SendGrid errors
+journalctl -u pilotai-backend -n 100 --no-pager | grep -i sendgrid
+```
+
+**Common issues:**
+
+- API key not set in systemd service
+- Sender email not verified in SendGrid
+- SendGrid API quota exceeded (free tier: 100/day)
+
 ---
 
 ## Database (Supabase)

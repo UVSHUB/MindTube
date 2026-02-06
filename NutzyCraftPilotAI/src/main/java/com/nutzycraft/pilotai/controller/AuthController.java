@@ -59,13 +59,16 @@ public class AuthController {
         newUser.setVerified(false);
         userRepository.save(newUser);
 
-        // Send Real Email
-        try {
-            emailService.sendVerificationEmail(email, code);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Failed to send email: " + e.getMessage());
-        }
+        // Send Real Email asynchronously to prevent blocking
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                emailService.sendVerificationEmail(email, code);
+                System.out.println("✅ Verification email sent successfully to: " + email);
+            } catch (Exception e) {
+                System.err.println("❌ Failed to send verification email to " + email + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
 
         response.put("success", true);
         response.put("message", "Account created. Please check your email for the verification code.");

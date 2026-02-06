@@ -4,8 +4,7 @@ uvicorn[standard]==0.32.0
 pydantic==2.10.0
 python-multipart==0.0.6
 
-# YouTube transcript extraction
-yt-dlp==2026.2.4
+# YouTube transcript extraction - using RapidAPI
 
 # NLP processing
 spacy==3.8.2

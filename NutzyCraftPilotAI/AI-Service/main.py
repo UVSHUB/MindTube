@@ -61,7 +61,7 @@ class AnalysisResponse(BaseModel):
 
 
 class TranscriptExtractor:
-    """Handles YouTube transcript extraction using yt-dlp with cookie support"""
+    """Handles YouTube transcript extraction using RapidAPI"""
     
     @staticmethod
     def extract_video_id(youtube_url: str) -> str:
@@ -93,7 +93,7 @@ class TranscriptExtractor:
     @staticmethod
     def extract_transcript(youtube_url: str) -> tuple[str, int]:
         """
-        Extract transcript and duration from YouTube video using yt-dlp
+        Extract transcript and duration from YouTube video using RapidAPI
         
         Args:
             youtube_url: The YouTube video URL
@@ -102,103 +102,72 @@ class TranscriptExtractor:
             Tuple of (transcript text, duration in seconds)
         """
         try:
+            import requests
+            
             logger.info(f"Extracting transcript from: {youtube_url}")
             
-            import sys
-            # Command to get transcript and metadata
-            command = [
-                sys.executable, "-m", "yt_dlp",
-                "--skip-download",
-                "--write-auto-subs",
-                "--write-subs",
-                "--sub-lang", "en",
-                "--sub-format", "json3",
-                "--output", "temp_transcript",
-                "--write-info-json",
-                "--cookies", "cookies.txt",  # Use cookies file
-                "--quiet",
-                "--no-warnings",
-                youtube_url
-            ]
+            # Extract video ID
+            video_id = TranscriptExtractor.extract_video_id(youtube_url)
+            logger.info(f"Video ID: {video_id}")
             
-            result = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
+            # Get RapidAPI key from environment
+            rapidapi_key = os.getenv('RAPIDAPI_KEY')
+            if not rapidapi_key:
+                raise Exception("RAPIDAPI_KEY not configured in .env file")
             
-            # Check for errors
-            if result.returncode != 0 and result.stderr:
-                logger.warning(f"yt-dlp stderr: {result.stderr}")
+            # Call RapidAPI YouTube Transcript endpoint
+            url = "https://youtube-transcript3.p.rapidapi.com/api/transcript"
             
-            # Get duration from info.json
-            duration = 0
-            info_file = Path("temp_transcript.info.json")
-            if info_file.exists():
-                try:
-                    with open(info_file, 'r', encoding='utf-8') as f:
-                        info_data = json.load(f)
-                        duration = int(info_data.get('duration', 0))
-                except Exception as e:
-                    logger.warning(f"Could not parse duration: {e}")
-
-            # Find subtitle file
-            subtitle_patterns = [
-                "temp_transcript.en.json3",
-                "temp_transcript.json3",
-                "temp_transcript.en-US.json3",
-                "temp_transcript.en-GB.json3"
-            ]
+            querystring = {"videoId": video_id}
             
-            subtitle_file = None
-            for pattern in subtitle_patterns:
-                file_path = Path(pattern)
-                if file_path.exists():
-                    subtitle_file = file_path
-                    break
+            headers = {
+                "x-rapidapi-key": rapidapi_key,
+                "x-rapidapi-host": "youtube-transcript3.p.rapidapi.com"
+            }
             
-            if not subtitle_file:
-                # Clean up temp files
-                for p in Path(".").glob("temp_transcript*"):
-                    p.unlink(missing_ok=True)
-                raise Exception("No captions/subtitles available for this video. Captions may be disabled or cookies may need refreshing.")
+            logger.info("Fetching transcript from RapidAPI...")
+            response = requests.get(url, headers=headers, params=querystring, timeout=30)
             
-            # Parse JSON subtitle file
-            with open(subtitle_file, 'r', encoding='utf-8') as f:
-                subtitle_data = json.load(f)
+            if response.status_code != 200:
+                logger.error(f"RapidAPI error: {response.status_code} - {response.text}")
+                raise Exception(f"Failed to fetch transcript: {response.text}")
             
-            transcript_parts = []
-            if 'events' in subtitle_data:
-                for event in subtitle_data['events']:
-                    if 'segs' in event:
-                        for seg in event['segs']:
-                            if 'utf8' in seg:
-                                transcript_parts.append(seg['utf8'])
+            data = response.json()
             
-            # Clean up temp files
-            for p in Path(".").glob("temp_transcript*"):
-                p.unlink(missing_ok=True)
+            # Parse response
+            if not data or 'transcript' not in data:
+                raise Exception("No transcript available for this video")
             
-            if not transcript_parts:
-                raise Exception("Extracted subtitle file is empty")
+            transcript_entries = data['transcript']
             
+            if not transcript_entries:
+                raise Exception("Transcript is empty")
+            
+            # Combine all transcript text
+            transcript_parts = [entry['text'] for entry in transcript_entries if 'text' in entry]
             transcript = ' '.join(transcript_parts)
+            
+            # Calculate duration from last entry
+            duration = 0
+            if transcript_entries:
+                last_entry = transcript_entries[-1]
+                duration = int(last_entry.get('start', 0) + last_entry.get('duration', 0))
+            
             logger.info(f"✅ Extracted transcript: {len(transcript)} chars, Duration: {duration}s")
             
             return transcript, duration
             
-        except subprocess.TimeoutExpired:
-            logger.error("Transcript extraction timed out")
+        except requests.exceptions.Timeout:
+            logger.error("RapidAPI request timed out")
             raise Exception("Transcript extraction timed out")
+        except requests.exceptions.RequestException as e:
+            logger.error(f"RapidAPI request failed: {e}")
+            raise Exception(f"Failed to fetch transcript: {str(e)}")
         except ValueError as e:
             logger.error(f"Invalid YouTube URL: {e}")
             raise Exception(f"Invalid YouTube URL: {str(e)}")
         except Exception as e:
             logger.error(f"Transcript extraction error: {str(e)}")
-            # Clean up temp files
-            for p in Path(".").glob("temp_transcript*"):
-                p.unlink(missing_ok=True)
             raise Exception(f"Failed to extract transcript: {str(e)}")
 
 

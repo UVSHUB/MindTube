@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/config.js"></script>
 </head>
 
 <body style="background-color: #f8f9fa;">
@@ -100,7 +101,7 @@
 
             const user = JSON.parse(userJson);
             try {
-                const res = await fetch(`/api/user/me?userId=${user.id}`);
+                const res = await fetch(getApiUrl(`/api/user/me?userId=${user.id}`));
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success) {

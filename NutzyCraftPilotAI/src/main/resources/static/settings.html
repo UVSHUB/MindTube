@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/config.js"></script>
 </head>
 
 <body style="background-color: #f8f9fa;">
@@ -109,7 +110,7 @@
             const user = JSON.parse(userJson);
 
             try {
-                const res = await fetch(`/api/user/me?userId=${user.id}`);
+                const res = await fetch(getApiUrl(`/api/user/me?userId=${user.id}`));
                 const data = await res.json();
 
                 if (data.success) {
@@ -265,7 +266,7 @@
                     formData.append('file', fileInput.files[0]);
                     formData.append('userId', user.id);
 
-                    const avatarRes = await fetch('/api/user/me/avatar', {
+                    const avatarRes = await fetch(getApiUrl('/api/user/me/avatar'), {
                         method: 'POST',
                         body: formData
                         // Don't set Content-Type header - browser will set it with boundary automatically

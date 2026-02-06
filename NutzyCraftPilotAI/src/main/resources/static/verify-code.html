@@ -7,6 +7,7 @@
     <title>Verify Code - Nutzy Craft PilotAI</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
+    <script src="js/config.js"></script>
     <style>
         .form-group {
             margin-bottom: 1.5rem;
@@ -111,7 +112,7 @@
                     responseDiv.style.display = 'none';
 
                     try {
-                        const response = await fetch('/api/auth/verify', {
+                        const response = await fetch(getApiUrl('/api/auth/verify'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ email, code })
@@ -165,7 +166,7 @@
                     link.style.pointerEvents = 'none';
 
                     try {
-                        const response = await fetch('/api/auth/resend-code', {
+                        const response = await fetch(getApiUrl('/api/auth/resend-code'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ email })

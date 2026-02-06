@@ -230,7 +230,7 @@ async function loadUserProfile() {
 
   const user = JSON.parse(userJson);
   try {
-    const res = await fetch(`/api/user/me?userId=${user.id}`);
+    const res = await fetch(getApiUrl(`/api/user/me?userId=${user.id}`));
     if (res.ok) {
       const data = await res.json();
       if (data.success) {

